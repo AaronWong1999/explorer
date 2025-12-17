@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>edgeX 交互原型 Explorer</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <a href="#" class="logo" onclick="navigateTo('home')">
+                    <span class="logo-icon">◈</span>
+                    <span class="logo-text">edgeX</span>
+                    <span class="logo-badge">交互原型 Explorer</span>
+                </a>
+                <nav class="main-nav">
+                    <a href="#" class="nav-link active" onclick="navigateTo('home')" data-i18n="nav.explorer">Explorer</a>
+                    <a href="#" class="nav-link" onclick="navigateTo('requirements')" data-i18n="nav.requirements">Requirements</a>
+                </nav>
+            </div>
+            <div class="header-right">
+                <!-- Network Selector -->
+                <div class="network-selector" onclick="toggleNetworkMenu()">
+                    <span class="status-dot online"></span>
+                    <span id="current-network" data-i18n="nav.mainnet">Mainnet</span>
+                    <span class="dropdown-arrow">▼</span>
+                    <div class="network-dropdown" id="network-dropdown">
+                        <div class="network-option active" onclick="switchNetwork('mainnet')">
+                            <span class="status-dot online"></span>
+                            <div class="network-info">
+                                <span data-i18n="network.mainnet">edgeX Mainnet</span>
+                                <small data-i18n="network.settlementEth">Settlement: Ethereum</small>
+                            </div>
+                        </div>
+                        <div class="network-option" onclick="switchNetwork('testnet')">
+                            <span class="status-dot testnet"></span>
+                            <div class="network-info">
+                                <span data-i18n="network.testnet">edgeX Testnet</span>
+                                <small data-i18n="network.settlementEth">Settlement: Ethereum</small>
+                            </div>
+                        </div>
+                        <div class="network-option coming-soon" onclick="switchNetwork('edgechain')">
+                            <span class="status-dot edgechain"></span>
+                            <div class="network-info">
+                                <span>Edge Chain</span>
+                                <small data-i18n="network.settlementEdge">Settlement: Edge Chain</small>
+                                <span class="coming-soon-badge">Coming Soon</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Theme Toggle -->
+                <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Toggle Light/Dark Mode">
+                    <span class="theme-icon">☀️</span>
+                </button>
+                <!-- Language Toggle -->
+                <button class="lang-toggle" id="lang-toggle" onclick="toggleLanguage()">中文</button>
+                <!-- Connect Wallet -->
+                <button class="connect-btn" data-i18n="nav.connect">Connect Wallet</button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Home Page -->
+            <div id="page-home" class="page active">
+                <!-- Row 1: Explorer Stats + Perp Stats -->
+                <div class="stats-bar stats-bar-6">
+                    <div class="stat-item stat-compact">
+                        <span class="stat-value" id="stat-total-txs">0</span>
+                        <span class="stat-label" data-i18n="stats.totalTxs">Transactions</span>
+                    </div>
+                    <div class="stat-item stat-compact">
+                        <span class="stat-value" id="stat-total-users">0</span>
+                        <span class="stat-label" data-i18n="stats.totalUsers">Users</span>
+                    </div>
+                    <div class="stat-item stat-compact stat-perp">
+                        <span class="stat-value" id="stat-perp-volume">$0</span>
+                        <span class="stat-label" data-i18n="stats.perpVolume">Perp Volume</span>
+                    </div>
+                    <div class="stat-item stat-compact stat-perp">
+                        <span class="stat-value" id="stat-perp-oi">$0</span>
+                        <span class="stat-label" data-i18n="stats.perpOI">Perp OI</span>
+                    </div>
+                    <div class="stat-item stat-compact stat-spot">
+                        <span class="stat-value" id="stat-spot-volume">$0</span>
+                        <span class="stat-label" data-i18n="stats.spotVolume">Spot Volume</span>
+                    </div>
+                    <div class="stat-item stat-compact">
+                        <span class="stat-value" id="stat-tvl">$0</span>
+                        <span class="stat-label" data-i18n="stats.tvl">TVL</span>
+                    </div>
+                </div>
+                
+                <!-- Row 2: Vault + Deposit Stats -->
+                <div class="stats-bar stats-bar-6">
+                    <div class="stat-item stat-compact stat-vault">
+                        <span class="stat-value" id="stat-vault-tvl">$0</span>
+                        <span class="stat-label" data-i18n="stats.vaultTVL">eStrategy TVL</span>
+                    </div>
+                    <div class="stat-item stat-compact">
+                        <span class="stat-value" id="stat-distinct-depositors">0</span>
+                        <span class="stat-label" data-i18n="stats.distinctDepositors">Depositors</span>
+                    </div>
+                    <div class="stat-item stat-compact">
+                        <span class="stat-value" id="stat-total-deposit">$0</span>
+                        <span class="stat-label" data-i18n="stats.totalDeposit">Deposit</span>
+                    </div>
+                    <div class="stat-item stat-compact">
+                        <span class="stat-value" id="stat-total-withdraw">$0</span>
+                        <span class="stat-label" data-i18n="stats.totalWithdraw">Withdraw</span>
+                    </div>
+                    <div class="stat-item stat-compact stat-income">
+                        <span class="stat-value" id="stat-total-income">$0</span>
+                        <span class="stat-label" data-i18n="stats.totalIncome">Income</span>
+                    </div>
+                    <div class="stat-item stat-compact">
+                        <span class="stat-value" id="stat-total-batches">0</span>
+                        <span class="stat-label" data-i18n="stats.totalBatches">Batches</span>
+                    </div>
+                </div>
+
+                <!-- Enhanced Search Box -->
+                <div class="search-container">
+                    <div class="search-box" id="search-box">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="search-input" 
+                               data-i18n-placeholder="search.placeholder"
+                               placeholder="Search by Tx Hash / Address / Batch ID / Block / Order ID" 
+                               onfocus="showSearchDropdown()"
+                               oninput="handleSearchInput(event)"
+                               onkeypress="handleSearch(event)">
+                        <button class="search-btn" onclick="performSearch()" data-i18n="search.button">Search</button>
+                        
+                        <!-- Search Dropdown -->
+                        <div class="search-dropdown" id="search-dropdown">
+                            <div class="search-section" id="search-results-section" style="display: none;">
+                                <div class="search-section-title" data-i18n="search.searching">Searching...</div>
+                                <div class="search-results" id="search-results"></div>
+                            </div>
+                            <div class="search-section" id="recent-searches-section">
+                                <div class="search-section-title" data-i18n="search.recentSearches">Recent Searches</div>
+                                <div class="recent-searches" id="recent-searches"></div>
+                            </div>
+                            <div class="search-section">
+                                <div class="search-section-title" data-i18n="search.popularSearches">Popular</div>
+                                <div class="popular-searches" id="popular-searches"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="search-tags">
+                        <span class="search-tag" onclick="setSearchType('tx')">Tx Hash</span>
+                        <span class="search-tag" onclick="setSearchType('address')">Address</span>
+                        <span class="search-tag" onclick="setSearchType('batch')">Batch ID</span>
+                        <span class="search-tag" onclick="setSearchType('block')">Block</span>
+                        <span class="search-tag" onclick="setSearchType('order')">Order ID</span>
+                    </div>
+                </div>
+
+                <!-- Two Column Layout -->
+                <div class="two-column-layout">
+                    <!-- Latest Transactions -->
+                    <div class="data-panel">
+                        <div class="panel-header">
+                            <h2 data-i18n="home.latestTxs">Latest Transactions</h2>
+                            <a href="#" class="view-all" onclick="navigateTo('transactions')" data-i18n="home.viewAll">View All →</a>
+                        </div>
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th data-i18n="table.txHash">Tx Hash</th>
+                                        <th data-i18n="table.type">Type</th>
+                                        <th data-i18n="table.pair">Pair</th>
+                                        <th data-i18n="table.time">Time</th>
+                                        <th data-i18n="table.user">User</th>
+                                        <th data-i18n="table.status">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="latest-transactions">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Latest Batches -->
+                    <div class="data-panel">
+                        <div class="panel-header">
+                            <h2 data-i18n="home.latestBatches">Latest Batches</h2>
+                            <a href="#" class="view-all" onclick="navigateTo('batches')" data-i18n="home.viewAll">View All →</a>
+                        </div>
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th data-i18n="table.batchId">Batch ID</th>
+                                        <th data-i18n="table.time">Time</th>
+                                        <th data-i18n="table.txns">Txns</th>
+                                        <th data-i18n="table.l1Tx">L1 Tx</th>
+                                        <th data-i18n="table.status">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="latest-batches">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Activity Feed -->
+                <div class="activity-feed">
+                    <div class="panel-header">
+                        <h2><span class="live-dot"></span> <span data-i18n="home.liveActivity">Live Activity</span></h2>
+                        <div class="feed-controls">
+                            <button class="feed-btn active" onclick="setFeedFilter('all', this)" data-i18n="home.all">All</button>
+                            <button class="feed-btn" onclick="setFeedFilter('perp', this)" data-i18n="home.perp">Perp</button>
+                            <button class="feed-btn" onclick="setFeedFilter('spot', this)" data-i18n="home.spot">Spot</button>
+                            <button class="feed-btn" onclick="setFeedFilter('transfer', this)" data-i18n="home.transfers">Transfers</button>
+                            <button class="feed-btn" onclick="setFeedFilter('liquidation', this)" data-i18n="home.liquidations">Liquidations</button>
+                            <button class="feed-btn" onclick="setFeedFilter('vault', this)" data-i18n="home.vault">eStrategy</button>
+                        </div>
+                    </div>
+                    <div class="feed-container" id="live-feed">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transactions Page -->
+            <div id="page-transactions" class="page">
+                <!-- Live Stats Bar -->
+                <div class="page-live-stats">
+                    <div class="live-stat">
+                        <span class="live-indicator"></span>
+                        <span>Live</span>
+                    </div>
+                    <div class="live-stat">
+                        <span class="live-stat-value" id="tx-page-total">0</span>
+                        <span class="live-stat-label" data-i18n="stats.totalTxs">Total Transactions</span>
+                    </div>
+                    <div class="live-stat">
+                        <span class="live-stat-value" id="tx-page-tps">0</span>
+                        <span class="live-stat-label" data-i18n="stats.currentTps">TPS</span>
+                    </div>
+                    <div class="live-stat">
+                        <span class="live-stat-value" id="tx-page-pending">0</span>
+                        <span class="live-stat-label" data-i18n="stats.pendingTxs">Pending</span>
+                    </div>
+                    <div class="live-stat">
+                        <span class="live-stat-value" id="tx-page-sequenced">0</span>
+                        <span class="live-stat-label" data-i18n="stats.sequencedTxs">Sequenced</span>
+                    </div>
+                </div>
+                <div class="page-header">
+                    <h1 data-i18n="page.allTransactions">All Transactions</h1>
+                    <div class="filter-controls">
+                        <select id="tx-type-filter" onchange="filterTransactions()">
+                            <option value="all" data-i18n="filter.allTypes">All Types</option>
+                            <!-- Populated dynamically -->
+                        </select>
+                        <select id="tx-status-filter" onchange="filterTransactions()">
+                            <option value="all" data-i18n="filter.allStatus">All Status</option>
+                            <!-- Populated dynamically -->
+                        </select>
+                        <select id="tx-pair-filter" onchange="filterTransactions()">
+                            <option value="all" data-i18n="filter.allPairs">All Pairs</option>
+                            <option value="BTC-USDT">BTC-USDT</option>
+                            <option value="ETH-USDT">ETH-USDT</option>
+                            <option value="SOL-USDT">SOL-USDT</option>
+                            <option value="BNB-USDT">BNB-USDT</option>
+                            <option value="XRP-USDT">XRP-USDT</option>
+                            <option value="DOGE-USDT">DOGE-USDT</option>
+                            <option value="ARB-USDT">ARB-USDT</option>
+                            <option value="OP-USDT">OP-USDT</option>
+                        </select>
+                        <button class="export-btn" onclick="exportData('transactions')">📥 <span data-i18n="filter.export">Export CSV</span></button>
+                    </div>
+                </div>
+                <div class="full-table-container">
+                    <table class="data-table full-width">
+                        <thead>
+                            <tr>
+                                <th data-i18n="table.txHash">Tx Hash</th>
+                                <th data-i18n="table.type">Type</th>
+                                <th data-i18n="table.pair">Pair</th>
+                                <th data-i18n="table.side">Side</th>
+                                <th data-i18n="table.price">Price</th>
+                                <th data-i18n="table.size">Size</th>
+                                <th data-i18n="table.value">Value</th>
+                                <th data-i18n="table.time">Time</th>
+                                <th data-i18n="table.user">User</th>
+                                <th data-i18n="table.status">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="all-transactions">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination">
+                    <button class="page-btn" onclick="changePage('tx', -1)" data-i18n="pagination.previous">← Previous</button>
+                    <span class="page-info"><span data-i18n="pagination.page">Page</span> <span id="tx-page">1</span> <span data-i18n="pagination.of">of</span> <span id="tx-total-pages">100</span></span>
+                    <button class="page-btn" onclick="changePage('tx', 1)" data-i18n="pagination.next">Next →</button>
+                </div>
+            </div>
+
+            <!-- Batches Page -->
+            <div id="page-batches" class="page">
+                <!-- Live Stats Bar -->
+                <div class="page-live-stats">
+                    <div class="live-stat">
+                        <span class="live-indicator"></span>
+                        <span>Live</span>
+                    </div>
+                    <div class="live-stat">
+                        <span class="live-stat-value" id="batch-page-latest">#0</span>
+                        <span class="live-stat-label" data-i18n="stats.latestBatch">Latest Batch</span>
+                    </div>
+                    <div class="live-stat">
+                        <span class="live-stat-value" id="batch-page-pending">0</span>
+                        <span class="live-stat-label">Pending</span>
+                    </div>
+                    <div class="live-stat">
+                        <span class="live-stat-value" id="batch-page-proven">0</span>
+                        <span class="live-stat-label" data-i18n="stats.provenBatches">Proven</span>
+                    </div>
+                    <div class="live-stat">
+                        <span class="live-stat-value" id="batch-page-finalized">0</span>
+                        <span class="live-stat-label" data-i18n="stats.finalizedBatches">Finalized</span>
+                    </div>
+                </div>
+                <div class="page-header">
+                    <h1 data-i18n="page.allBatches">All Batches</h1>
+                    <div class="filter-controls">
+                        <select id="batch-status-filter" onchange="filterBatches()">
+                            <option value="all" data-i18n="filter.allStatus">All Status</option>
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+                </div>
+                <div class="full-table-container">
+                    <table class="data-table full-width">
+                        <thead>
+                            <tr>
+                                <th data-i18n="table.batchId">Batch ID</th>
+                                <th data-i18n="table.created">Created</th>
+                                <th data-i18n="table.sequenced">Sequenced</th>
+                                <th data-i18n="table.submitted">Submitted</th>
+                                <th data-i18n="table.txns">Transactions</th>
+                                <th data-i18n="table.l1Tx">L1 Tx Hash</th>
+                                <th data-i18n="table.ethBlock">ETH Block</th>
+                                <th data-i18n="table.status">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="all-batches">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination">
+                    <button class="page-btn" onclick="changePage('batch', -1)" data-i18n="pagination.previous">← Previous</button>
+                    <span class="page-info"><span data-i18n="pagination.page">Page</span> <span id="batch-page">1</span> <span data-i18n="pagination.of">of</span> <span id="batch-total-pages">50</span></span>
+                    <button class="page-btn" onclick="changePage('batch', 1)" data-i18n="pagination.next">Next →</button>
+                </div>
+            </div>
+
+            <!-- Transaction Detail Page -->
+            <div id="page-tx-detail" class="page">
+                <div class="breadcrumb">
+                    <a href="#" onclick="navigateTo('home')">Explorer</a> / 
+                    <a href="#" onclick="navigateTo('transactions')" data-i18n="page.allTransactions">Transactions</a> / 
+                    <span id="tx-detail-hash-breadcrumb">0x...</span>
+                </div>
+                
+                <div class="detail-header">
+                    <h1 data-i18n="txDetail.basicInfo">Transaction Details</h1>
+                    <div class="detail-actions">
+                        <button class="action-btn-small" onclick="copyToClipboard('tx-detail-hash')">📋 Copy Hash</button>
+                        <button class="action-btn-small" onclick="shareTx()">🔗 Share</button>
+                    </div>
+                </div>
+
+                <div class="detail-container">
+                    <!-- Basic Info -->
+                    <div class="detail-card">
+                        <h3>📋 <span data-i18n="txDetail.basicInfo">Transaction Details</span></h3>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="txDetail.hash">Transaction Hash</span>
+                            <span class="detail-value hash-value">
+                                <span id="tx-detail-hash"></span>
+                                <button class="copy-btn" onclick="copyToClipboard('tx-detail-hash')">📋</button>
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="txDetail.status">Status</span>
+                            <span class="detail-value" id="tx-detail-status"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="txDetail.timestamp">Timestamp</span>
+                            <span class="detail-value" id="tx-detail-time"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="txDetail.batch">Batch</span>
+                            <span class="detail-value">
+                                <a href="#" class="link" id="tx-detail-batch" onclick="viewBatch(this.dataset.batch)"></a>
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="txDetail.position">Position in Batch</span>
+                            <span class="detail-value" id="tx-detail-position"></span>
+                        </div>
+                    </div>
+
+                    <!-- Transaction Content -->
+                    <div class="detail-card">
+                        <h3>💱 <span data-i18n="txDetail.content">Transaction Content</span></h3>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="txDetail.type">Type</span>
+                            <span class="detail-value" id="tx-detail-type"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="txDetail.pair">Trading Pair</span>
+                            <span class="detail-value" id="tx-detail-pair"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="txDetail.side">Side</span>
+                            <span class="detail-value" id="tx-detail-side"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="txDetail.orderType">Order Type</span>
+                            <span class="detail-value" id="tx-detail-order-type"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="txDetail.price">Price</span>
+                            <span class="detail-value" id="tx-detail-price"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="txDetail.size">Size</span>
+                            <span class="detail-value" id="tx-detail-size"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="txDetail.value">Value</span>
+                            <span class="detail-value" id="tx-detail-value"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="txDetail.fee">Fee</span>
+                            <span class="detail-value" id="tx-detail-fee"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="txDetail.role">Role</span>
+                            <span class="detail-value" id="tx-detail-role"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="txDetail.leverage">Leverage</span>
+                            <span class="detail-value" id="tx-detail-leverage"></span>
+                        </div>
+                    </div>
+
+                    <!-- On-Chain Proof -->
+                    <div class="detail-card highlight-card">
+                        <h3>⛓️ <span data-i18n="txDetail.onChainProof">On-Chain Settlement Proof</span> <span class="badge badge-success" data-i18n="txDetail.zkVerified">ZK Verified</span></h3>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="txDetail.settlementLayer">Settlement Layer</span>
+                            <span class="detail-value" id="tx-detail-settlement-layer">Ethereum Mainnet</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="txDetail.batch">Batch ID</span>
+                            <span class="detail-value" id="tx-detail-proof-batch"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="txDetail.l1Tx">L1 Transaction</span>
+                            <span class="detail-value">
+                                <span id="tx-detail-l1-tx" class="hash-link"></span>
+                                <a href="#" id="tx-detail-etherscan" class="etherscan-link" target="_blank" data-i18n="txDetail.viewEtherscan">↗ View on Etherscan</a>
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="txDetail.proofStatus">Proof Status</span>
+                            <span class="detail-value" id="tx-detail-proof-status"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="batchDetail.verifierContract">Verifier Contract</span>
+                            <span class="detail-value mono" id="tx-detail-verifier"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="txDetail.stateRootBefore">State Root (Before)</span>
+                            <span class="detail-value mono" id="tx-detail-state-before"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="txDetail.stateRootAfter">State Root (After)</span>
+                            <span class="detail-value mono" id="tx-detail-state-after"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="txDetail.verifyTime">Verification Time</span>
+                            <span class="detail-value" id="tx-detail-verify-time"></span>
+                        </div>
+                        <div class="proof-actions">
+                            <button class="action-btn primary" onclick="verifyProof()">🔍 <span data-i18n="txDetail.verifyProof">Verify Proof</span></button>
+                            <button class="action-btn secondary" onclick="showTechnicalDetails()">📄 <span data-i18n="txDetail.techDetails">Technical Details</span></button>
+                        </div>
+                    </div>
+
+                    <!-- Related Info -->
+                    <div class="detail-card">
+                        <h3>🔗 <span data-i18n="txDetail.relatedInfo">Related Information</span></h3>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="txDetail.orderId">Order ID</span>
+                            <span class="detail-value hash-value" id="tx-detail-order-id"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="txDetail.cloid">Client Order ID</span>
+                            <span class="detail-value hash-value" id="tx-detail-cloid"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="txDetail.userAddress">User Address</span>
+                            <span class="detail-value">
+                                <a href="#" class="link" id="tx-detail-user" onclick="viewAddress(this.dataset.address)"></a>
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="txDetail.counterparty">Counterparty</span>
+                            <span class="detail-value">
+                                <a href="#" class="link" id="tx-detail-counterparty" onclick="viewAddress(this.dataset.address)"></a>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Input Data -->
+                    <div class="detail-card full-width">
+                        <h3>📝 <span data-i18n="txDetail.inputData">Input Data</span></h3>
+                        <div class="input-data-container">
+                            <pre id="tx-input-data" class="code-block"></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Batch Detail Page -->
+            <div id="page-batch-detail" class="page">
+                <div class="breadcrumb">
+                    <a href="#" onclick="navigateTo('home')">Explorer</a> / 
+                    <a href="#" onclick="navigateTo('batches')" data-i18n="page.allBatches">Batches</a> / 
+                    <span id="batch-detail-id-breadcrumb">#0</span>
+                </div>
+                <div class="detail-container">
+                    <!-- Batch Info -->
+                    <div class="detail-card">
+                        <h3>📦 <span data-i18n="batchDetail.info">Batch Information</span></h3>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="batchDetail.id">Batch ID</span>
+                            <span class="detail-value" id="batch-detail-id"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="txDetail.status">Status</span>
+                            <span class="detail-value" id="batch-detail-status"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="batchDetail.createdAt">Created At</span>
+                            <span class="detail-value" id="batch-detail-created"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="batchDetail.sequencedAt">Sequenced At</span>
+                            <span class="detail-value" id="batch-detail-sequenced"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="batchDetail.submittedAt">Submitted At</span>
+                            <span class="detail-value" id="batch-detail-submitted"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="batchDetail.provenAt">Proven At</span>
+                            <span class="detail-value" id="batch-detail-proven"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="batchDetail.finalizedAt">Finalized At</span>
+                            <span class="detail-value" id="batch-detail-finalized"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="batchDetail.totalTxs">Total Transactions</span>
+                            <span class="detail-value" id="batch-detail-tx-count"></span>
+                        </div>
+                    </div>
+
+                    <!-- Status Timeline -->
+                    <div class="detail-card">
+                        <h3>📊 <span data-i18n="batchDetail.statusTimeline">Status Timeline</span></h3>
+                        <div class="status-timeline" id="batch-status-timeline">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Settlement Info -->
+                    <div class="detail-card highlight-card">
+                        <h3>⛓️ <span data-i18n="batchDetail.settlement">Settlement Information</span></h3>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="txDetail.settlementLayer">Settlement Layer</span>
+                            <span class="detail-value" id="batch-detail-settlement-layer"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="batchDetail.l1TxHash">L1 Transaction Hash</span>
+                            <span class="detail-value">
+                                <span id="batch-detail-l1-tx" class="hash-link"></span>
+                                <a href="#" id="batch-detail-etherscan" class="etherscan-link" target="_blank">↗ Etherscan</a>
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="batchDetail.ethBlock">Ethereum Block</span>
+                            <span class="detail-value" id="batch-detail-eth-block"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="batchDetail.gasUsed">Gas Used</span>
+                            <span class="detail-value" id="batch-detail-gas"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="batchDetail.proofType">Proof Type</span>
+                            <span class="detail-value" id="batch-detail-proof-type"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="batchDetail.proofSize">Proof Size</span>
+                            <span class="detail-value" id="batch-detail-proof-size"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="batchDetail.verifierContract">Verifier Contract</span>
+                            <span class="detail-value mono" id="batch-detail-verifier"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="batchDetail.stateRoot">State Root</span>
+                            <span class="detail-value mono" id="batch-detail-state-root"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="batchDetail.previousStateRoot">Previous State Root</span>
+                            <span class="detail-value mono" id="batch-detail-prev-state-root"></span>
+                        </div>
+                    </div>
+
+                    <!-- Data Availability -->
+                    <div class="detail-card">
+                        <h3>📂 <span data-i18n="batchDetail.dataAvailability">Data Availability</span></h3>
+                        <div class="detail-row">
+                            <span class="detail-label">Mode</span>
+                            <span class="detail-value" id="batch-detail-da-mode"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="batchDetail.blobSize">Blob Size</span>
+                            <span class="detail-value" id="batch-detail-blob-size"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label" data-i18n="batchDetail.compressionRatio">Compression Ratio</span>
+                            <span class="detail-value" id="batch-detail-compression"></span>
+                        </div>
+                    </div>
+
+                    <!-- Transactions in Batch -->
+                    <div class="detail-card full-width">
+                        <h3 data-i18n="batchDetail.txsInBatch">Transactions in this Batch</h3>
+                        <p class="subtitle" id="batch-tx-subtitle"></p>
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th data-i18n="table.txHash">Tx Hash</th>
+                                        <th data-i18n="table.type">Type</th>
+                                        <th data-i18n="table.pair">Pair</th>
+                                        <th data-i18n="table.side">Side</th>
+                                        <th data-i18n="table.price">Price</th>
+                                        <th data-i18n="table.size">Size</th>
+                                        <th data-i18n="table.user">User</th>
+                                        <th data-i18n="table.status">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="batch-transactions">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Address Page -->
+            <div id="page-address" class="page">
+                <div class="breadcrumb">
+                    <a href="#" onclick="navigateTo('home')">Explorer</a> / 
+                    <span data-i18n="page.addressDetails">Address</span>
+                </div>
+                <div class="address-header">
+                    <div class="address-title">
+                        <span class="address-icon">👤</span>
+                        <span class="address-hash" id="address-hash"></span>
+                        <button class="copy-btn" onclick="copyToClipboard('address-hash')">📋</button>
+                    </div>
+                </div>
+                <div class="address-stats">
+                    <div class="address-stat">
+                        <span class="stat-value" id="address-tx-count">0</span>
+                        <span class="stat-label" data-i18n="address.txCount">Total Transactions</span>
+                    </div>
+                    <div class="address-stat">
+                        <span class="stat-value" id="address-volume">$0</span>
+                        <span class="stat-label" data-i18n="address.volume">Total Volume</span>
+                    </div>
+                    <div class="address-stat">
+                        <span class="stat-value" id="address-first-tx">-</span>
+                        <span class="stat-label" data-i18n="address.firstTx">First Transaction</span>
+                    </div>
+                    <div class="address-stat">
+                        <span class="stat-value" id="address-last-tx">-</span>
+                        <span class="stat-label" data-i18n="address.lastTx">Last Transaction</span>
+                    </div>
+                </div>
+
+                <!-- Address Tabs -->
+                <div class="address-tabs">
+                    <button class="address-tab active" onclick="setAddressTab('transactions', this)" data-i18n="address.txHistory">Transactions</button>
+                    <button class="address-tab" onclick="setAddressTab('transfers', this)" data-i18n="address.transfers">Transfers</button>
+                </div>
+
+                <div class="address-filters">
+                    <div class="filter-tabs">
+                        <button class="filter-tab active" onclick="setAddressFilter('all', this)" data-i18n="home.all">All</button>
+                        <button class="filter-tab" onclick="setAddressFilter('trading', this)" data-i18n="home.trading">Trading</button>
+                        <button class="filter-tab" onclick="setAddressFilter('transfer', this)" data-i18n="home.transfers">Transfers</button>
+                        <button class="filter-tab" onclick="setAddressFilter('liquidation', this)" data-i18n="home.liquidations">Liquidations</button>
+                        <button class="filter-tab" onclick="setAddressFilter('vault', this)" data-i18n="home.vault">Vault</button>
+                        <button class="filter-tab" onclick="setAddressFilter('account', this)" data-i18n="home.account">Account</button>
+                    </div>
+                    <button class="export-btn" onclick="exportData('address')">📥 <span data-i18n="filter.export">Export CSV</span></button>
+                </div>
+
+                <div class="full-table-container">
+                    <table class="data-table full-width">
+                        <thead>
+                            <tr>
+                                <th data-i18n="table.txHash">Tx Hash</th>
+                                <th data-i18n="table.type">Type</th>
+                                <th data-i18n="table.pair">Pair</th>
+                                <th data-i18n="table.side">Side</th>
+                                <th data-i18n="table.price">Price</th>
+                                <th data-i18n="table.size">Size</th>
+                                <th data-i18n="table.value">Value</th>
+                                <th data-i18n="table.fee">Fee</th>
+                                <th data-i18n="table.time">Time</th>
+                                <th data-i18n="table.status">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="address-transactions">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination">
+                    <button class="page-btn" onclick="changePage('address', -1)" data-i18n="pagination.previous">← Previous</button>
+                    <span class="page-info"><span data-i18n="pagination.page">Page</span> <span id="address-page">1</span> <span data-i18n="pagination.of">of</span> <span id="address-total-pages">10</span></span>
+                    <button class="page-btn" onclick="changePage('address', 1)" data-i18n="pagination.next">Next →</button>
+                </div>
+            </div>
+
+            <!-- Blocks Page (Reserved for future Edge Chain upgrade) -->
+            <div id="page-blocks" class="page">
+                <div class="page-header">
+                    <h1 data-i18n="page.allBlocks">All Blocks</h1>
+                    <div class="future-feature-badge">
+                        <span>🔮</span> <span data-i18n="blocks.edgeChainReserved">Edge Chain Reserved</span>
+                    </div>
+                </div>
+                
+                <!-- Reserved Notice -->
+                <div class="reserved-notice">
+                    <div class="reserved-icon">🔮</div>
+                    <h2 data-i18n="blocks.reservedTitle">Edge Chain Upgrade Reserved Page</h2>
+                    <p data-i18n="blocks.reservedDesc">This page is reserved for the future Edge Chain upgrade. Currently, edgeX settles transactions on Ethereum Mainnet through batches. When Edge Chain launches, this page will display native block information.</p>
+                    <div class="reserved-info">
+                        <div class="reserved-info-item">
+                            <span class="reserved-label" data-i18n="blocks.currentSettlement">Current Settlement</span>
+                            <span class="reserved-value">⟠ Ethereum Mainnet</span>
+                        </div>
+                        <div class="reserved-info-item">
+                            <span class="reserved-label" data-i18n="blocks.futureSettlement">Future Settlement</span>
+                            <span class="reserved-value">◈ Edge Chain</span>
+                        </div>
+                        <div class="reserved-info-item">
+                            <span class="reserved-label" data-i18n="blocks.status">Status</span>
+                            <span class="reserved-value coming-soon-text" data-i18n="blocks.comingSoon">Coming Soon</span>
+                        </div>
+                    </div>
+                    <button class="action-btn primary" onclick="navigateTo('batches')">
+                        📦 <span data-i18n="blocks.viewBatches">View Current Batches</span>
+                    </button>
+                </div>
+
+                <!-- Preview Table (Simulated) -->
+                <div class="preview-section">
+                    <h3 data-i18n="blocks.previewTitle">Preview: Future Block List</h3>
+                    <p class="preview-desc" data-i18n="blocks.previewDesc">The following is a simulated preview of the block list when Edge Chain launches.</p>
+                    <div class="full-table-container preview-table">
+                        <table class="data-table full-width">
+                            <thead>
+                                <tr>
+                                    <th data-i18n="table.blockNumber">Block</th>
+                                    <th data-i18n="table.time">Time</th>
+                                    <th data-i18n="table.txns">Txns</th>
+                                    <th data-i18n="blocks.validator">Validator</th>
+                                    <th data-i18n="blocks.gasUsed">Gas Used</th>
+                                    <th data-i18n="table.hash">Hash</th>
+                                </tr>
+                            </thead>
+                            <tbody id="all-blocks">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="pagination">
+                    <button class="page-btn" onclick="changePage('block', -1)" data-i18n="pagination.previous">← Previous</button>
+                    <span class="page-info"><span data-i18n="pagination.page">Page</span> <span id="block-page">1</span> <span data-i18n="pagination.of">of</span> <span id="block-total-pages">100</span></span>
+                    <button class="page-btn" onclick="changePage('block', 1)" data-i18n="pagination.next">Next →</button>
+                </div>
+            </div>
+
+            <!-- Requirements Page -->
+            <div id="page-requirements" class="page">
+                <div class="requirements-container">
+                    <div class="requirements-header">
+                        <h1 data-i18n="requirements.title">edgeX Explorer 需求介绍</h1>
+                        <p class="requirements-subtitle" data-i18n="requirements.subtitle">本文档描述了 edgeX Explorer 区块链浏览器的完整功能需求和页面结构</p>
+                        <p class="requirements-hint">勾选/取消勾选来控制各页面功能的显示与隐藏，点击保存后生效</p>
+                    </div>
+
+                    <!-- Top Save Bar -->
+                    <div class="config-save-bar">
+                        <div class="config-summary">
+                            <span class="config-count" id="config-count-top">已启用: 0/0</span>
+                        </div>
+                        <div class="config-actions">
+                            <button class="config-btn reset" onclick="FeatureConfig.reset()">↺ 恢复默认</button>
+                            <button class="config-btn save" onclick="FeatureConfig.save()">💾 保存配置</button>
+                        </div>
+                    </div>
+
+                    <!-- Table of Contents -->
+                    <div class="requirements-toc">
+                        <h2>📑 目录</h2>
+                        <div class="toc-section">
+                            <h3>页面</h3>
+                            <ul class="toc-pages">
+                                <li><a href="#" onclick="scrollToSection('req-home')">首页 (Home)</a></li>
+                                <li><a href="#" onclick="scrollToSection('req-transactions')">交易列表页 (Transactions)</a></li>
+                                <li><a href="#" onclick="scrollToSection('req-tx-detail')">交易详情页 (Transaction Detail)</a></li>
+                                <li><a href="#" onclick="scrollToSection('req-batches')">批次列表页 (Batches)</a></li>
+                                <li><a href="#" onclick="scrollToSection('req-batch-detail')">批次详情页 (Batch Detail)</a></li>
+                                <li><a href="#" onclick="scrollToSection('req-address')">地址页 (Address)</a></li>
+                                <li><a href="#" onclick="scrollToSection('req-blocks')">区块列表页 (Blocks) <span class="toc-badge">储备</span></a></li>
+                            </ul>
+                        </div>
+                        <div class="toc-section">
+                            <h3>定义</h3>
+                            <ul class="toc-definitions">
+                                <li><a href="#" onclick="scrollToSection('req-tx-types')">交易类型 (37种)</a></li>
+                                <li><a href="#" onclick="scrollToSection('req-status')">交易状态 (7种) / 批次状态 (5种)</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- 1. Home Page -->
+                    <div class="requirements-section" id="req-home">
+                        <h2>1. 首页 (Home)</h2>
+                        <div class="req-card">
+                            <div class="req-preview">
+                                <button class="preview-btn" onclick="navigateTo('home')">👁 查看页面</button>
+                            </div>
+                            
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="home.stats" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 1.1 统计面板</label></h3>
+                            <p>首页顶部展示关键统计数据，分为两行：</p>
+                            <table class="req-table req-table-checkable">
+                                <thead>
+                                    <tr><th></th><th>字段</th><th>说明</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.stats.totalTxs" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Total Transactions</td><td>总交易笔数</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.stats.totalUsers" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Total Users</td><td>总用户数</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.stats.perpVolume" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Perp Volume</td><td>合约累计交易量</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.stats.perpOI" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Perp OI</td><td>合约未平仓合约</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.stats.spotVolume" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Spot Volume</td><td>现货累计交易量</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.stats.tvl" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>TVL</td><td>总锁仓价值</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.stats.vaultTVL" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>eStrategy TVL</td><td>金库锁仓价值</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.stats.depositors" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Depositors</td><td>存款人数</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.stats.totalDeposit" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Total Deposit</td><td>总存款</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.stats.totalWithdraw" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Total Withdraw</td><td>总提款</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.stats.totalIncome" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Total Income</td><td>总收入</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.stats.totalBatches" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Total Batches</td><td>总批次数</td></tr>
+                                </tbody>
+                            </table>
+
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="home.latestTxs" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 1.2 最新交易表格</label></h3>
+                            <table class="req-table req-table-checkable">
+                                <thead>
+                                    <tr><th></th><th>列名</th><th>说明</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.latestTxs.hash" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Tx Hash</td><td>交易哈希，点击跳转详情</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.latestTxs.type" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Type</td><td>交易类型，带颜色标签</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.latestTxs.pair" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Pair</td><td>交易对</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.latestTxs.time" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Time</td><td>相对时间 (如 "2s ago")</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.latestTxs.user" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>User</td><td>用户地址，点击跳转地址页</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.latestTxs.status" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Status</td><td>交易状态</td></tr>
+                                </tbody>
+                            </table>
+
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="home.latestBatches" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 1.3 最新批次表格</label></h3>
+                            <table class="req-table req-table-checkable">
+                                <thead>
+                                    <tr><th></th><th>列名</th><th>说明</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.latestBatches.id" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Batch ID</td><td>批次编号，点击跳转详情</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.latestBatches.time" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Time</td><td>创建时间</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.latestBatches.txns" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Txns</td><td>包含交易数</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.latestBatches.l1Tx" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>L1 Tx</td><td>L1交易哈希</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.latestBatches.status" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Status</td><td>批次状态</td></tr>
+                                </tbody>
+                            </table>
+
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="home.liveFeed" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 1.4 Live Feed 实时动态</label></h3>
+                            <p>实时展示最新交易，支持按类型筛选：</p>
+                            <ul class="feature-list">
+                                <li><label><input type="checkbox" class="feature-checkbox" data-feature="home.liveFeed.all" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> <strong>All</strong> - 全部交易</label></li>
+                                <li><label><input type="checkbox" class="feature-checkbox" data-feature="home.liveFeed.perp" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> <strong>Perp</strong> - 合约交易</label></li>
+                                <li><label><input type="checkbox" class="feature-checkbox" data-feature="home.liveFeed.spot" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> <strong>Spot</strong> - 现货交易</label></li>
+                                <li><label><input type="checkbox" class="feature-checkbox" data-feature="home.liveFeed.transfers" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> <strong>Transfers</strong> - 划转交易</label></li>
+                                <li><label><input type="checkbox" class="feature-checkbox" data-feature="home.liveFeed.liquidations" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> <strong>Liquidations</strong> - 清算交易</label></li>
+                                <li><label><input type="checkbox" class="feature-checkbox" data-feature="home.liveFeed.vault" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> <strong>eStrategy</strong> - 金库操作</label></li>
+                            </ul>
+
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="home.search" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 1.5 搜索框</label></h3>
+                            <p>支持搜索交易哈希、地址、批次ID、区块、订单ID</p>
+                        </div>
+                    </div>
+
+                    <!-- 2. Transactions Page -->
+                    <div class="requirements-section" id="req-transactions">
+                        <h2>2. 交易列表页 (Transactions)</h2>
+                        <div class="req-card">
+                            <div class="req-preview">
+                                <button class="preview-btn" onclick="navigateTo('transactions')">👁 查看页面</button>
+                            </div>
+
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="txs.statsBar" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 2.1 实时统计栏</label></h3>
+                            <table class="req-table req-table-checkable">
+                                <thead>
+                                    <tr><th></th><th>字段</th><th>说明</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txs.statsBar.total" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Total Transactions</td><td>总交易数</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txs.statsBar.tps" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>TPS</td><td>当前每秒交易数</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txs.statsBar.pending" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Pending</td><td>待处理交易数</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txs.statsBar.sequenced" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Sequenced</td><td>已排序交易数</td></tr>
+                                </tbody>
+                            </table>
+
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="txs.filters" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 2.2 筛选器</label></h3>
+                            <ul class="feature-list">
+                                <li><label><input type="checkbox" class="feature-checkbox" data-feature="txs.filters.type" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> <strong>类型筛选</strong> - 按交易类型分组筛选</label></li>
+                                <li><label><input type="checkbox" class="feature-checkbox" data-feature="txs.filters.status" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> <strong>状态筛选</strong> - 按交易状态筛选</label></li>
+                                <li><label><input type="checkbox" class="feature-checkbox" data-feature="txs.filters.pair" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> <strong>交易对筛选</strong> - 按交易对筛选</label></li>
+                                <li><label><input type="checkbox" class="feature-checkbox" data-feature="txs.filters.export" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> <strong>导出CSV</strong> - 导出当前数据</label></li>
+                            </ul>
+
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="txs.table" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 2.3 交易表格</label></h3>
+                            <table class="req-table req-table-checkable">
+                                <thead>
+                                    <tr><th></th><th>列名</th><th>说明</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txs.table.hash" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Tx Hash</td><td>交易哈希</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txs.table.type" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Type</td><td>交易类型</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txs.table.pair" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Pair</td><td>交易对</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txs.table.side" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Side</td><td>方向 (Long/Short)</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txs.table.price" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Price</td><td>成交价格</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txs.table.size" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Size</td><td>成交数量</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txs.table.value" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Value</td><td>成交金额</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txs.table.time" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Time</td><td>交易时间</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txs.table.user" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>User</td><td>用户地址</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txs.table.status" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Status</td><td>交易状态</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- 3. Transaction Detail Page -->
+                    <div class="requirements-section" id="req-tx-detail">
+                        <h2>3. 交易详情页 (Transaction Detail)</h2>
+                        <div class="req-card">
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="txDetail.basicInfo" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 3.1 基础信息</label></h3>
+                            <table class="req-table req-table-checkable">
+                                <thead>
+                                    <tr><th></th><th>字段</th><th>说明</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txDetail.basicInfo.hash" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Transaction Hash</td><td>完整交易哈希</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txDetail.basicInfo.status" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Status</td><td>当前状态及描述</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txDetail.basicInfo.time" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Time</td><td>交易时间</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txDetail.basicInfo.batch" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Batch</td><td>所属批次，可点击跳转</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txDetail.basicInfo.position" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Position</td><td>在批次中的位置</td></tr>
+                                </tbody>
+                            </table>
+
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="txDetail.content" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 3.2 交易内容</label></h3>
+                            <table class="req-table req-table-checkable">
+                                <thead>
+                                    <tr><th></th><th>字段</th><th>说明</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txDetail.content.type" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Type</td><td>交易类型标签</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txDetail.content.pair" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Trading Pair</td><td>交易对</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txDetail.content.side" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Side</td><td>方向</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txDetail.content.orderType" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Order Type</td><td>订单类型 (Limit/Market等)</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txDetail.content.price" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Price</td><td>成交价格</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txDetail.content.size" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Size</td><td>成交数量</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txDetail.content.value" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Value</td><td>成交金额</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txDetail.content.fee" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Fee</td><td>手续费</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txDetail.content.role" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Maker/Taker</td><td>角色标识</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txDetail.content.leverage" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Leverage</td><td>杠杆倍数（合约交易）</td></tr>
+                                </tbody>
+                            </table>
+
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="txDetail.proof" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 3.3 链上证明</label></h3>
+                            <table class="req-table req-table-checkable">
+                                <thead>
+                                    <tr><th></th><th>字段</th><th>说明</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txDetail.proof.settlement" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Settlement Layer</td><td>结算层 (Ethereum/Edge Chain)</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txDetail.proof.batch" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Proof Batch</td><td>证明批次</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txDetail.proof.l1Tx" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>L1 Tx Hash</td><td>L1交易哈希</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txDetail.proof.status" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Proof Status</td><td>证明状态</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txDetail.proof.verifier" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Verifier Contract</td><td>验证合约地址</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txDetail.proof.stateBefore" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>State Root Before</td><td>交易前状态根</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txDetail.proof.stateAfter" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>State Root After</td><td>交易后状态根</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txDetail.proof.verifyTime" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Verification Time</td><td>验证耗时</td></tr>
+                                </tbody>
+                            </table>
+
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="txDetail.inputData" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 3.4 输入数据</label></h3>
+                            <p>展示原始交易数据的JSON格式，包含完整的交易参数。</p>
+                        </div>
+                    </div>
+
+                    <!-- 4. Batches Page -->
+                    <div class="requirements-section" id="req-batches">
+                        <h2>4. 批次列表页 (Batches)</h2>
+                        <div class="req-card">
+                            <div class="req-preview">
+                                <button class="preview-btn" onclick="navigateTo('batches')">👁 查看页面</button>
+                            </div>
+
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="batches.stats" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 4.1 实时统计栏</label></h3>
+                            <table class="req-table req-table-checkable">
+                                <thead>
+                                    <tr><th></th><th>字段</th><th>说明</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="batches.stats.latest" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Latest Batch</td><td>最新批次编号</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="batches.stats.pending" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Pending</td><td>待处理批次数</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="batches.stats.proven" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Proven</td><td>已证明批次数</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="batches.stats.finalized" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Finalized</td><td>已最终确定批次数</td></tr>
+                                </tbody>
+                            </table>
+
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="batches.table" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 4.2 批次表格</label></h3>
+                            <table class="req-table req-table-checkable">
+                                <thead>
+                                    <tr><th></th><th>列名</th><th>说明</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="batches.table.id" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Batch ID</td><td>批次编号</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="batches.table.created" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Created</td><td>创建时间</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="batches.table.sequenced" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Sequenced</td><td>排序时间</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="batches.table.submitted" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Submitted</td><td>提交时间</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="batches.table.txCount" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Transactions</td><td>包含交易数</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="batches.table.l1Hash" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>L1 Tx Hash</td><td>L1交易哈希</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="batches.table.ethBlock" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>ETH Block</td><td>以太坊区块号</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="batches.table.status" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Status</td><td>批次状态</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- 5. Batch Detail Page -->
+                    <div class="requirements-section" id="req-batch-detail">
+                        <h2>5. 批次详情页 (Batch Detail)</h2>
+                        <div class="req-card">
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="batchDetail.overview" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 5.1 批次概览</label></h3>
+                            <table class="req-table req-table-checkable">
+                                <thead>
+                                    <tr><th></th><th>字段</th><th>说明</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="batchDetail.overview.id" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Batch ID</td><td>批次编号</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="batchDetail.overview.status" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Status</td><td>当前状态及描述</td></tr>
+                                </tbody>
+                            </table>
+
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="batchDetail.timeline" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 5.2 状态时间线</label></h3>
+                            <p>展示批次生命周期各阶段的时间戳：</p>
+                            <ul class="feature-list">
+                                <li><label><input type="checkbox" class="feature-checkbox" data-feature="batchDetail.timeline.created" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> Created - 批次创建时间</label></li>
+                                <li><label><input type="checkbox" class="feature-checkbox" data-feature="batchDetail.timeline.sequenced" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> Sequenced - 排序完成时间</label></li>
+                                <li><label><input type="checkbox" class="feature-checkbox" data-feature="batchDetail.timeline.submitted" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> Submitted - 提交到L1时间</label></li>
+                                <li><label><input type="checkbox" class="feature-checkbox" data-feature="batchDetail.timeline.proven" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> Proven - 证明完成时间</label></li>
+                                <li><label><input type="checkbox" class="feature-checkbox" data-feature="batchDetail.timeline.finalized" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> Finalized - 最终确定时间</label></li>
+                            </ul>
+
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="batchDetail.settlement" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 5.3 结算信息</label></h3>
+                            <table class="req-table req-table-checkable">
+                                <thead>
+                                    <tr><th></th><th>字段</th><th>说明</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="batchDetail.settlement.layer" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Settlement Layer</td><td>结算层</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="batchDetail.settlement.l1Hash" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>L1 Tx Hash</td><td>L1交易哈希</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="batchDetail.settlement.ethBlock" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>ETH Block</td><td>以太坊区块号</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="batchDetail.settlement.stateRoot" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>State Root</td><td>状态根</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="batchDetail.settlement.verifier" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Verifier</td><td>验证合约</td></tr>
+                                </tbody>
+                            </table>
+
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="batchDetail.transactions" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 5.4 批次内交易</label></h3>
+                            <p>展示该批次包含的所有交易列表。</p>
+                        </div>
+                    </div>
+
+                    <!-- 7. Address Page -->
+                    <div class="requirements-section" id="req-address">
+                        <h2>6. 地址页 (Address)</h2>
+                        <div class="req-card">
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="address.overview" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 6.1 地址概览</label></h3>
+                            <table class="req-table req-table-checkable">
+                                <thead>
+                                    <tr><th></th><th>字段</th><th>说明</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="address.overview.address" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Address</td><td>完整地址，可复制</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="address.overview.txCount" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Transactions</td><td>该地址交易总数</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="address.overview.volume" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Volume</td><td>该地址交易总量</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="address.overview.firstTx" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>First Tx</td><td>首次交易日期</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="address.overview.lastTx" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Last Tx</td><td>最近交易时间</td></tr>
+                                </tbody>
+                            </table>
+
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="address.filters" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 6.2 交易历史筛选</label></h3>
+                            <ul class="feature-list">
+                                <li><label><input type="checkbox" class="feature-checkbox" data-feature="address.filters.all" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> <strong>All</strong> - 全部交易</label></li>
+                                <li><label><input type="checkbox" class="feature-checkbox" data-feature="address.filters.trading" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> <strong>Trading</strong> - 交易操作（下单、撤单、改单等）</label></li>
+                                <li><label><input type="checkbox" class="feature-checkbox" data-feature="address.filters.transfers" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> <strong>Transfers</strong> - 划转操作</label></li>
+                                <li><label><input type="checkbox" class="feature-checkbox" data-feature="address.filters.liquidations" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> <strong>Liquidations</strong> - 清算记录</label></li>
+                                <li><label><input type="checkbox" class="feature-checkbox" data-feature="address.filters.vault" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> <strong>Vault</strong> - 金库操作</label></li>
+                                <li><label><input type="checkbox" class="feature-checkbox" data-feature="address.filters.account" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> <strong>Account</strong> - 账户设置</label></li>
+                            </ul>
+
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="address.table" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 6.3 交易历史表格</label></h3>
+                            <p>展示该地址的所有交易记录，包含类型、交易对、时间、金额、状态等信息。</p>
+                        </div>
+                    </div>
+
+                    <!-- 7. Blocks Page -->
+                    <div class="requirements-section" id="req-blocks">
+                        <h2><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="blocks" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 7. 区块列表页 (Blocks) - Edge Chain 升级储备页</label></h2>
+                        <div class="req-card">
+                            <div class="req-preview">
+                                <button class="preview-btn" onclick="navigateTo('blocks')">👁 查看页面</button>
+                            </div>
+
+                            <h3>7.1 页面说明</h3>
+                            <div class="reserved-notice-inline">
+                                <p><strong>🔮 这是一个升级储备页面</strong></p>
+                                <p>当前 edgeX 使用 <strong>Ethereum Mainnet</strong> 作为结算层，交易通过批次(Batches)提交到以太坊进行最终结算。因此目前没有独立的区块概念。</p>
+                                <p>未来当 edgeX 迁移到自有的 <strong>Edge Chain</strong> 后，此页面将展示 Edge Chain 的原生区块信息。</p>
+                            </div>
+
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="blocks.status" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 7.2 当前状态</label></h3>
+                            <table class="req-table req-table-checkable">
+                                <thead>
+                                    <tr><th></th><th>项目</th><th>说明</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="blocks.status.current" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>当前结算层</td><td>⟠ Ethereum Mainnet</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="blocks.status.future" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>未来结算层</td><td>◈ Edge Chain</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="blocks.status.pageStatus" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>页面状态</td><td>🔮 Coming Soon (储备中)</td></tr>
+                                </tbody>
+                            </table>
+
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="blocks.table" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 7.3 未来区块表格字段（预览）</label></h3>
+                            <table class="req-table req-table-checkable">
+                                <thead>
+                                    <tr><th></th><th>列名</th><th>说明</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="blocks.table.number" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Block</td><td>区块号</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="blocks.table.time" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Time</td><td>出块时间</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="blocks.table.txCount" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Transactions</td><td>包含交易数</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="blocks.table.validator" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Validator</td><td>验证者地址</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="blocks.table.gas" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Gas Used</td><td>Gas消耗</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="blocks.table.hash" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Hash</td><td>区块哈希</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- 8. Transaction Types -->
+                    <div class="requirements-section" id="req-tx-types">
+                        <h2><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="txTypes" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 8. 交易类型定义</label></h2>
+                        <div class="req-card">
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="txTypes.perp" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 8.1 合约交易 (Perp Trading)</label></h3>
+                            <table class="req-table req-table-checkable">
+                                <thead>
+                                    <tr><th></th><th>类型ID</th><th>名称</th><th>说明</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txTypes.perp.perpTrade" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>perpTrade</td><td>合约成交</td><td>合约订单成交</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txTypes.perp.perpOrder" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>perpOrder</td><td>合约下单</td><td>提交合约订单</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txTypes.perp.perpCancel" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>perpCancel</td><td>合约撤单</td><td>取消合约订单</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txTypes.perp.perpCancelByCloid" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>perpCancelByCloid</td><td>按ClOID撤单</td><td>通过Client Order ID取消</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txTypes.perp.perpCancelAll" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>perpCancelAll</td><td>撤销全部订单</td><td>一键撤销所有合约订单</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txTypes.perp.perpModify" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>perpModify</td><td>合约改单</td><td>修改合约订单</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txTypes.perp.perpBatchModify" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>perpBatchModify</td><td>批量改单</td><td>批量修改合约订单</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txTypes.perp.perpTwap" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>perpTwap</td><td>合约TWAP</td><td>时间加权平均价格订单</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txTypes.perp.perpTwapCancel" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>perpTwapCancel</td><td>取消TWAP</td><td>取消TWAP订单</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txTypes.perp.scheduleCancel" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>scheduleCancel</td><td>计划撤单</td><td>定时撤单（死人开关）</td></tr>
+                                </tbody>
+                            </table>
+
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="txTypes.spot" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 8.2 现货交易 (Spot Trading)</label></h3>
+                            <table class="req-table req-table-checkable">
+                                <thead>
+                                    <tr><th></th><th>类型ID</th><th>名称</th><th>说明</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txTypes.spot.spotTrade" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>spotTrade</td><td>现货成交</td><td>现货订单成交</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txTypes.spot.spotOrder" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>spotOrder</td><td>现货下单</td><td>提交现货订单</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txTypes.spot.spotCancel" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>spotCancel</td><td>现货撤单</td><td>取消现货订单</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txTypes.spot.spotCancelByCloid" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>spotCancelByCloid</td><td>按ClOID撤单</td><td>通过Client Order ID取消</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txTypes.spot.spotCancelAll" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>spotCancelAll</td><td>撤销全部订单</td><td>一键撤销所有现货订单</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txTypes.spot.spotModify" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>spotModify</td><td>现货改单</td><td>修改现货订单</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txTypes.spot.spotBatchModify" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>spotBatchModify</td><td>批量改单</td><td>批量修改现货订单</td></tr>
+                                </tbody>
+                            </table>
+
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="txTypes.liquidation" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 8.3 清算 (Liquidation)</label></h3>
+                            <table class="req-table req-table-checkable">
+                                <thead>
+                                    <tr><th></th><th>类型ID</th><th>名称</th><th>说明</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txTypes.liquidation.liquidation" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>liquidation</td><td>强平</td><td>强制平仓</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txTypes.liquidation.adl" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>adl</td><td>自动减仓</td><td>Auto-Deleverage</td></tr>
+                                </tbody>
+                            </table>
+
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="txTypes.funding" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 8.4 资金费 (Funding)</label></h3>
+                            <table class="req-table req-table-checkable">
+                                <thead>
+                                    <tr><th></th><th>类型ID</th><th>名称</th><th>说明</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txTypes.funding.funding" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>funding</td><td>资金费</td><td>资金费率结算</td></tr>
+                                </tbody>
+                            </table>
+
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="txTypes.transfers" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 8.5 划转 (Transfers)</label></h3>
+                            <table class="req-table req-table-checkable">
+                                <thead>
+                                    <tr><th></th><th>类型ID</th><th>名称</th><th>说明</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txTypes.transfers.deposit" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>deposit</td><td>充值</td><td>资产充值</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txTypes.transfers.withdraw" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>withdraw</td><td>提现</td><td>资产提现</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txTypes.transfers.perpToSpot" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>perpToSpot</td><td>合约→现货</td><td>合约账户划转到现货</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txTypes.transfers.spotToPerp" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>spotToPerp</td><td>现货→合约</td><td>现货账户划转到合约</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txTypes.transfers.perpToPred" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>perpToPred</td><td>合约→预测</td><td>合约划转到预测市场</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txTypes.transfers.predToPerp" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>predToPerp</td><td>预测→合约</td><td>预测市场划转到合约</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txTypes.transfers.spotToPred" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>spotToPred</td><td>现货→预测</td><td>现货划转到预测市场</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txTypes.transfers.predToSpot" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>predToSpot</td><td>预测→现货</td><td>预测市场划转到现货</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txTypes.transfers.spotTransfer" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>spotTransfer</td><td>现货转账</td><td>现货代币转账</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txTypes.transfers.internalTransfer" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>internalTransfer</td><td>内部划转</td><td>内部账户间划转</td></tr>
+                                </tbody>
+                            </table>
+
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="txTypes.account" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 8.6 账户管理 (Account)</label></h3>
+                            <table class="req-table req-table-checkable">
+                                <thead>
+                                    <tr><th></th><th>类型ID</th><th>名称</th><th>说明</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txTypes.account.updateLeverage" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>updateLeverage</td><td>调整杠杆</td><td>修改杠杆倍数</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txTypes.account.updateMargin" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>updateMargin</td><td>调整保证金</td><td>调整保证金数量</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txTypes.account.setIsolated" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>setIsolated</td><td>设为逐仓</td><td>切换为逐仓模式</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txTypes.account.setCross" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>setCross</td><td>设为全仓</td><td>切换为全仓模式</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txTypes.account.approveAgent" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>approveAgent</td><td>授权API钱包</td><td>授权API交易权限</td></tr>
+                                </tbody>
+                            </table>
+
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="txTypes.vault" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 8.7 金库 (eStrategy)</label></h3>
+                            <table class="req-table req-table-checkable">
+                                <thead>
+                                    <tr><th></th><th>类型ID</th><th>名称</th><th>说明</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txTypes.vault.vaultDeposit" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>vaultDeposit</td><td>金库存入</td><td>存入金库</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txTypes.vault.vaultWithdraw" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>vaultWithdraw</td><td>金库取出</td><td>从金库提取</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txTypes.vault.vaultClaim" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>vaultClaim</td><td>领取收益</td><td>领取金库收益</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- 9. Status Definitions -->
+                    <div class="requirements-section" id="req-status">
+                        <h2><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="status" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 9. 状态定义</label></h2>
+                        <div class="req-card">
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="status.tx" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 9.1 交易状态 (Transaction Status)</label></h3>
+                            <table class="req-table req-table-checkable">
+                                <thead>
+                                    <tr><th></th><th>状态ID</th><th>名称</th><th>颜色</th><th>说明</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="status.tx.pending" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>pending</td><td>待处理</td><td style="color:#f59e0b">●</td><td>交易已提交，等待处理</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="status.tx.sequenced" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>sequenced</td><td>已排序</td><td style="color:#3b82f6">●</td><td>已被排序器接收并排序</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="status.tx.confirmed" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>confirmed</td><td>已确认</td><td style="color:#10b981">●</td><td>交易已确认执行</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="status.tx.batched" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>batched</td><td>已打包</td><td style="color:#8b5cf6">●</td><td>已打包进批次</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="status.tx.proven" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>proven</td><td>已证明</td><td style="color:#06b6d4">●</td><td>ZK证明已生成</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="status.tx.finalized" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>finalized</td><td>已最终确定</td><td style="color:#22c55e">●</td><td>已在L1最终确定</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="status.tx.failed" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>failed</td><td>失败</td><td style="color:#ef4444">●</td><td>交易执行失败</td></tr>
+                                </tbody>
+                            </table>
+
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="status.batch" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 9.2 批次状态 (Batch Status)</label></h3>
+                            <table class="req-table req-table-checkable">
+                                <thead>
+                                    <tr><th></th><th>状态ID</th><th>名称</th><th>颜色</th><th>说明</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="status.batch.pending" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>pending</td><td>待处理</td><td style="color:#f59e0b">●</td><td>批次已创建，等待排序</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="status.batch.sequenced" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>sequenced</td><td>已排序</td><td style="color:#3b82f6">●</td><td>已排序，等待生成证明</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="status.batch.committed" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>committed</td><td>已提交</td><td style="color:#8b5cf6">●</td><td>已提交到L1，等待验证</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="status.batch.proven" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>proven</td><td>已证明</td><td style="color:#06b6d4">●</td><td>ZK证明已在L1验证</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="status.batch.finalized" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>finalized</td><td>已最终确定</td><td style="color:#22c55e">●</td><td>已在L1不可逆确认</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Config JSON Import/Export -->
+                    <div class="config-json-section">
+                        <h3>配置导入/导出</h3>
+                        <p class="config-json-hint">复制下方JSON分享配置，或粘贴他人配置后点击"导入配置"</p>
+                        <textarea id="config-json-textarea" class="config-json-textarea" placeholder="配置JSON将在此显示..."></textarea>
+                        <div class="config-json-actions">
+                            <button class="config-btn export" onclick="FeatureConfig.exportJSON()">📋 复制配置</button>
+                            <button class="config-btn import" onclick="FeatureConfig.importJSON()">📥 导入配置</button>
+                        </div>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="requirements-footer">
+                        <p>文档版本: v2.1.0 | 最后更新: 2024年12月</p>
+                        <p>© edgeX Exchange - 区块链浏览器交互原型</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-left">
+                <span class="footer-logo">◈ edgeX Explorer</span>
+                <span class="footer-version">v2.1.0</span>
+            </div>
+            <div class="footer-center">
+                <a href="https://docs.edgex.exchange" target="_blank" data-i18n="footer.docs">Docs</a>
+                <a href="#" data-i18n="footer.api">API</a>
+                <a href="#" data-i18n="footer.github">GitHub</a>
+                <a href="#" data-i18n="footer.support">Support</a>
+                <a href="#" data-i18n="footer.terms">Terms</a>
+            </div>
+            <div class="footer-right">
+                <span class="status-indicator">
+                    <span class="status-dot online"></span>
+                    <span data-i18n="footer.status">All Systems Operational</span>
+                </span>
+            </div>
+        </footer>
+
+        <!-- Toast Notification -->
+        <div id="toast" class="toast"></div>
+
+        <!-- Modal -->
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="modal-title"></h3>
+                    <button class="modal-close" onclick="closeModal()">×</button>
+                </div>
+                <div class="modal-body" id="modal-body">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="i18n.js"></script>
+    <script src="data.js"></script>
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
