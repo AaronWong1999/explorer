@@ -31,13 +31,6 @@ const FeatureConfig = {
         'home.latestBatches.txns': true,
         'home.latestBatches.l1Tx': true,
         'home.latestBatches.status': true,
-        'home.liveFeed': true,
-        'home.liveFeed.all': true,
-        'home.liveFeed.perp': true,
-        'home.liveFeed.spot': true,
-        'home.liveFeed.transfers': true,
-        'home.liveFeed.liquidations': true,
-        'home.liveFeed.vault': true,
         'home.search': true,
 
         // ============ TRANSACTIONS PAGE ============

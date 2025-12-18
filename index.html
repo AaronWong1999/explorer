@@ -211,22 +211,6 @@
                     </div>
                 </div>
 
-                <!-- Live Activity Feed -->
-                <div class="activity-feed">
-                    <div class="panel-header">
-                        <h2><span class="live-dot"></span> <span data-i18n="home.liveActivity">Live Activity</span></h2>
-                        <div class="feed-controls">
-                            <button class="feed-btn active" onclick="setFeedFilter('all', this)" data-i18n="home.all">All</button>
-                            <button class="feed-btn" onclick="setFeedFilter('perp', this)" data-i18n="home.perp">Perp</button>
-                            <button class="feed-btn" onclick="setFeedFilter('spot', this)" data-i18n="home.spot">Spot</button>
-                            <button class="feed-btn" onclick="setFeedFilter('transfer', this)" data-i18n="home.transfers">Transfers</button>
-                            <button class="feed-btn" onclick="setFeedFilter('liquidation', this)" data-i18n="home.liquidations">Liquidations</button>
-                            <button class="feed-btn" onclick="setFeedFilter('vault', this)" data-i18n="home.vault">eStrategy</button>
-                        </div>
-                    </div>
-                    <div class="feed-container" id="live-feed">
-                    </div>
-                </div>
             </div>
 
             <!-- Transactions Page -->
@@ -917,18 +901,7 @@
                                 </tbody>
                             </table>
 
-                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="home.liveFeed" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 1.4 Live Feed 实时动态</label></h3>
-                            <p>实时展示最新交易，支持按类型筛选：</p>
-                            <ul class="feature-list">
-                                <li><label><input type="checkbox" class="feature-checkbox" data-feature="home.liveFeed.all" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> <strong>All</strong> - 全部交易</label></li>
-                                <li><label><input type="checkbox" class="feature-checkbox" data-feature="home.liveFeed.perp" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> <strong>Perp</strong> - 合约交易</label></li>
-                                <li><label><input type="checkbox" class="feature-checkbox" data-feature="home.liveFeed.spot" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> <strong>Spot</strong> - 现货交易</label></li>
-                                <li><label><input type="checkbox" class="feature-checkbox" data-feature="home.liveFeed.transfers" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> <strong>Transfers</strong> - 划转交易</label></li>
-                                <li><label><input type="checkbox" class="feature-checkbox" data-feature="home.liveFeed.liquidations" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> <strong>Liquidations</strong> - 清算交易</label></li>
-                                <li><label><input type="checkbox" class="feature-checkbox" data-feature="home.liveFeed.vault" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> <strong>eStrategy</strong> - 金库操作</label></li>
-                            </ul>
-
-                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="home.search" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 1.5 搜索框</label></h3>
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="home.search" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 1.4 搜索框</label></h3>
                             <p>支持搜索交易哈希、地址、批次ID、区块、订单ID</p>
                         </div>
                     </div>
