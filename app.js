@@ -336,32 +336,8 @@ function updateLatestBatches() {
 }
 
 function updateLiveFeed() {
-    const feed = document.getElementById('live-feed');
-    let txs = globalState.transactions.slice(0, 30);
-    
-    if (feedFilter !== 'all') {
-        txs = txs.filter(tx => tx.category === feedFilter);
-    }
-    
-    feed.innerHTML = txs.slice(0, 20).map((tx, i) => `
-        <div class="feed-item ${tx.type} ${i === 0 ? 'new' : ''}" onclick="viewTransaction('${tx.hash}')">
-            <span class="feed-icon">${tx.typeIcon}</span>
-            <div class="feed-content">
-                <div class="feed-main">
-                    <span class="feed-type">${getTypeLabel(tx.type)}</span>
-                    <span class="feed-pair">${tx.pair}</span>
-                    <span class="feed-status ${tx.status}">${tx.statusIcon}</span>
-                </div>
-                <div class="feed-details">
-                    ${tx.sizeFormatted} @ ${tx.priceFormatted} • ${truncateHash(tx.user, 6, 4)}
-                </div>
-            </div>
-            <div class="feed-value">
-                <div class="feed-amount ${tx.side === 'long' ? 'positive' : 'negative'}">${tx.valueFormatted}</div>
-                <div class="feed-time">${formatTimeI18n(tx.timestamp)}</div>
-            </div>
-        </div>
-    `).join('');
+    // Live feed has been removed, function kept for compatibility
+    return;
 }
 
 function setFeedFilter(filter, btn) {
