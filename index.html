@@ -286,17 +286,6 @@
                             <option value="all" data-i18n="filter.allStatus">All Status</option>
                             <!-- Populated dynamically -->
                         </select>
-                        <select id="tx-pair-filter" onchange="filterTransactions()">
-                            <option value="all" data-i18n="filter.allPairs">All Pairs</option>
-                            <option value="BTC-USDT">BTC-USDT</option>
-                            <option value="ETH-USDT">ETH-USDT</option>
-                            <option value="SOL-USDT">SOL-USDT</option>
-                            <option value="BNB-USDT">BNB-USDT</option>
-                            <option value="XRP-USDT">XRP-USDT</option>
-                            <option value="DOGE-USDT">DOGE-USDT</option>
-                            <option value="ARB-USDT">ARB-USDT</option>
-                            <option value="OP-USDT">OP-USDT</option>
-                        </select>
                         <button class="export-btn" onclick="exportData('transactions')">📥 <span data-i18n="filter.export">Export CSV</span></button>
                     </div>
                 </div>
@@ -305,12 +294,8 @@
                         <thead>
                             <tr>
                                 <th data-i18n="table.txHash">Tx Hash</th>
-                                <th data-i18n="table.type">Type</th>
-                                <th data-i18n="table.pair">Pair</th>
-                                <th data-i18n="table.side">Side</th>
-                                <th data-i18n="table.price">Price</th>
-                                <th data-i18n="table.size">Size</th>
-                                <th data-i18n="table.value">Value</th>
+                                <th data-i18n="table.type">Action</th>
+                                <th data-i18n="table.batch">Batch</th>
                                 <th data-i18n="table.time">Time</th>
                                 <th data-i18n="table.user">User</th>
                                 <th data-i18n="table.status">Status</th>
@@ -1058,9 +1043,8 @@
 
                             <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="txs.filters" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 2.2 筛选器</label></h3>
                             <ul class="feature-list">
-                                <li><label><input type="checkbox" class="feature-checkbox" data-feature="txs.filters.type" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> <strong>类型筛选</strong> - 按交易类型分组筛选</label></li>
+                                <li><label><input type="checkbox" class="feature-checkbox" data-feature="txs.filters.type" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> <strong>类型筛选</strong> - 按操作类型分组筛选</label></li>
                                 <li><label><input type="checkbox" class="feature-checkbox" data-feature="txs.filters.status" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> <strong>状态筛选</strong> - 按交易状态筛选</label></li>
-                                <li><label><input type="checkbox" class="feature-checkbox" data-feature="txs.filters.pair" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> <strong>交易对筛选</strong> - 按交易对筛选</label></li>
                                 <li><label><input type="checkbox" class="feature-checkbox" data-feature="txs.filters.export" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> <strong>导出CSV</strong> - 导出当前数据</label></li>
                             </ul>
 
@@ -1071,12 +1055,8 @@
                                 </thead>
                                 <tbody>
                                     <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txs.table.hash" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Tx Hash</td><td>交易哈希</td></tr>
-                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txs.table.type" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Type</td><td>交易类型</td></tr>
-                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txs.table.pair" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Pair</td><td>交易对</td></tr>
-                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txs.table.side" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Side</td><td>方向 (Long/Short)</td></tr>
-                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txs.table.price" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Price</td><td>成交价格</td></tr>
-                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txs.table.size" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Size</td><td>成交数量</td></tr>
-                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txs.table.value" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Value</td><td>成交金额</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txs.table.type" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Action</td><td>操作类型</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txs.table.batch" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Batch</td><td>所属批次</td></tr>
                                     <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txs.table.time" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Time</td><td>交易时间</td></tr>
                                     <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txs.table.user" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>User</td><td>用户地址</td></tr>
                                     <tr><td><input type="checkbox" class="feature-checkbox" data-feature="txs.table.status" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Status</td><td>交易状态</td></tr>

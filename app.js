@@ -1024,20 +1024,15 @@ function startTransactionsPageUpdates() {
 function loadAllTransactions(page = 1) {
     const typeFilter = document.getElementById('tx-type-filter')?.value || 'all';
     const statusFilter = document.getElementById('tx-status-filter')?.value || 'all';
-    const pairFilter = document.getElementById('tx-pair-filter')?.value || 'all';
     
-    const result = getTransactions(page, 20, { type: typeFilter, status: statusFilter, pair: pairFilter });
+    const result = getTransactions(page, 20, { type: typeFilter, status: statusFilter });
     const tbody = document.getElementById('all-transactions');
     
     tbody.innerHTML = result.data.map(tx => `
         <tr onclick="viewTransaction('${tx.hash}')">
             <td class="hash-cell">${truncateHash(tx.hash)}</td>
             <td><span class="type-cell ${tx.type}">${tx.typeIcon} ${getTypeLabel(tx.type)}</span></td>
-            <td>${tx.pair}</td>
-            <td class="side-cell ${tx.side}">${getSideLabel(tx.side)}</td>
-            <td>${tx.priceFormatted}</td>
-            <td>${tx.sizeFormatted}</td>
-            <td>${tx.valueFormatted}</td>
+            <td class="hash-cell"><a href="#batch/${tx.batchId}" onclick="event.stopPropagation(); viewBatch(${tx.batchId})">#${tx.batchId}</a></td>
             <td class="time-cell">${formatTimeI18n(tx.timestamp)}</td>
             <td class="address-cell">${truncateHash(tx.user, 6, 4)}</td>
             <td><span class="status-cell ${tx.status}" style="--status-color: ${tx.statusColor}">${tx.statusIcon} ${getStatusLabel(tx.status)}</span></td>

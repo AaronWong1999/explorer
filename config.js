@@ -53,16 +53,11 @@ const FeatureConfig = {
         'txs.filters': true,
         'txs.filters.type': true,
         'txs.filters.status': true,
-        'txs.filters.pair': true,
         'txs.filters.export': true,
         'txs.table': true,
         'txs.table.hash': true,
         'txs.table.type': true,
-        'txs.table.pair': true,
-        'txs.table.side': true,
-        'txs.table.price': true,
-        'txs.table.size': true,
-        'txs.table.value': true,
+        'txs.table.batch': true,
         'txs.table.time': true,
         'txs.table.user': true,
         'txs.table.status': true,
@@ -360,14 +355,10 @@ const FeatureConfig = {
         this.applyColumnVisibility('all-transactions', {
             0: 'txs.table.hash',
             1: 'txs.table.type',
-            2: 'txs.table.pair',
-            3: 'txs.table.side',
-            4: 'txs.table.price',
-            5: 'txs.table.size',
-            6: 'txs.table.value',
-            7: 'txs.table.time',
-            8: 'txs.table.user',
-            9: 'txs.table.status'
+            2: 'txs.table.batch',
+            3: 'txs.table.time',
+            4: 'txs.table.user',
+            5: 'txs.table.status'
         });
 
         // Batches page
