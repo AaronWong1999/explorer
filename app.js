@@ -36,6 +36,8 @@ document.addEventListener('DOMContentLoaded', () => {
 // Get page name from URL hash
 function getPageFromHash() {
     const hash = window.location.hash.slice(1); // Remove #
+    if (!hash) return null;
+    
     const validPages = ['home', 'transactions', 'batches', 'blocks', 'requirements'];
     if (validPages.includes(hash)) {
         return hash;
@@ -47,11 +49,39 @@ function getPageFromHash() {
     return null;
 }
 
+// Get current hash for comparison
+function getCurrentHashPage() {
+    const hash = window.location.hash.slice(1);
+    if (!hash) return 'home';
+    
+    // For detail pages, return the full hash path
+    if (hash.startsWith('tx/') || hash.startsWith('batch/') || hash.startsWith('address/')) {
+        return hash;
+    }
+    return hash;
+}
+
 // Handle hash changes
 function handleHashChange() {
-    const page = getPageFromHash();
-    if (page && page !== currentPage) {
-        navigateTo(page);
+    const hashPage = getPageFromHash();
+    if (!hashPage) return;
+    
+    // Get the current actual page state
+    let currentHashPage = currentPage;
+    if (currentPage === 'tx-detail') {
+        const hash = document.getElementById('tx-detail-hash');
+        if (hash) currentHashPage = 'tx/' + hash.textContent;
+    } else if (currentPage === 'batch-detail') {
+        const id = document.getElementById('batch-detail-id');
+        if (id) currentHashPage = 'batch/' + id.textContent.replace('#', '');
+    } else if (currentPage === 'address') {
+        const addr = document.getElementById('address-hash');
+        if (addr) currentHashPage = 'address/' + addr.textContent;
+    }
+    
+    // Only navigate if the hash actually changed
+    if (hashPage !== currentHashPage) {
+        navigateTo(hashPage);
     }
 }
 
@@ -302,6 +332,59 @@ function updateStats() {
     document.getElementById('stat-total-withdraw').textContent = formatUSD(globalState.totalWithdraw);
     document.getElementById('stat-total-income').textContent = formatUSD(globalState.totalIncome);
     document.getElementById('stat-total-batches').textContent = formatNumber(globalState.totalBatches);
+    
+    // Update Repurchase Stats
+    updateRepurchaseStats();
+}
+
+function updateRepurchaseStats() {
+    const repurchase = globalState.repurchase;
+    
+    // Set address link
+    const addressLink = document.getElementById('repurchase-address');
+    if (addressLink) {
+        addressLink.dataset.address = repurchase.address;
+    }
+    
+    // Total amount (format as M)
+    const totalAmountEl = document.getElementById('repurchase-total-amount');
+    if (totalAmountEl) {
+        totalAmountEl.textContent = formatNumber(repurchase.totalAmount);
+    }
+    
+    // Total value
+    const totalValueEl = document.getElementById('repurchase-total-value');
+    if (totalValueEl) {
+        totalValueEl.textContent = '$' + repurchase.totalValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+    
+    // 24h amount
+    const amount24hEl = document.getElementById('repurchase-24h-amount');
+    if (amount24hEl) {
+        amount24hEl.textContent = formatNumber(repurchase.amount24h);
+    }
+    
+    // 24h value
+    const value24hEl = document.getElementById('repurchase-24h-value');
+    if (value24hEl) {
+        value24hEl.textContent = '$' + repurchase.value24h.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+    
+    // 24h amount change
+    const amountChangeEl = document.getElementById('repurchase-24h-amount-change');
+    if (amountChangeEl) {
+        const amountChange = repurchase.amountChange24h;
+        amountChangeEl.textContent = (amountChange >= 0 ? '↑ +' : '↓ ') + Math.abs(amountChange).toFixed(2) + '%';
+        amountChangeEl.className = 'repurchase-change ' + (amountChange >= 0 ? 'positive' : 'negative');
+    }
+    
+    // 24h value change
+    const valueChangeEl = document.getElementById('repurchase-24h-value-change');
+    if (valueChangeEl) {
+        const valueChange = repurchase.valueChange24h;
+        valueChangeEl.textContent = (valueChange >= 0 ? '↑ +' : '↓ ') + Math.abs(valueChange).toFixed(2) + '%';
+        valueChangeEl.className = 'repurchase-change ' + (valueChange >= 0 ? 'positive' : 'negative');
+    }
 }
 
 function updateLatestTransactions() {
@@ -1058,6 +1141,8 @@ function initTxDetailPage(hash) {
     const batchLink = document.getElementById('tx-detail-batch');
     batchLink.textContent = '#' + tx.batchId;
     batchLink.dataset.batch = tx.batchId;
+    batchLink.href = '#batch/' + tx.batchId;
+    batchLink.onclick = function(e) { e.preventDefault(); viewBatch(this.dataset.batch); };
     
     document.getElementById('tx-detail-position').textContent = `${tx.positionInBatch} / ~1,000`;
     
@@ -1081,7 +1166,7 @@ function initTxDetailPage(hash) {
     // On-Chain Proof - with settlement layer info
     const settlementLayer = globalState.settlementLayer.current === 'ethereum' ? 'Ethereum Mainnet' : 'Edge Chain';
     document.getElementById('tx-detail-settlement-layer').textContent = settlementLayer;
-    document.getElementById('tx-detail-proof-batch').innerHTML = `<a href="#" class="link" onclick="viewBatch(${tx.batchId})">#${tx.batchId}</a>`;
+    document.getElementById('tx-detail-proof-batch').innerHTML = `<a href="#batch/${tx.batchId}" class="link" onclick="event.preventDefault(); viewBatch(${tx.batchId})">#${tx.batchId}</a>`;
     document.getElementById('tx-detail-l1-tx').textContent = truncateHash(tx.l1TxHash);
     
     const etherscanLink = document.getElementById('tx-detail-etherscan');
@@ -1110,10 +1195,14 @@ function initTxDetailPage(hash) {
     const userLink = document.getElementById('tx-detail-user');
     userLink.textContent = tx.user;
     userLink.dataset.address = tx.user;
+    userLink.href = '#address/' + tx.user;
+    userLink.onclick = function(e) { e.preventDefault(); viewAddress(this.dataset.address); };
     
     const counterpartyLink = document.getElementById('tx-detail-counterparty');
     counterpartyLink.textContent = tx.counterparty;
     counterpartyLink.dataset.address = tx.counterparty;
+    counterpartyLink.href = '#address/' + tx.counterparty;
+    counterpartyLink.onclick = function(e) { e.preventDefault(); viewAddress(this.dataset.address); };
     
     // Input Data
     document.getElementById('tx-input-data').textContent = JSON.stringify({
@@ -1241,6 +1330,81 @@ function initAddressPage(address) {
     document.getElementById('address-first-tx').textContent = formatDateTime(addrData.firstTx).split(' ')[0];
     document.getElementById('address-last-tx').textContent = formatTimeI18n(addrData.lastTx);
     
+    // Total Value
+    document.getElementById('address-total-value').textContent = formatUSD(addrData.totalValue);
+    
+    // Account Values
+    document.getElementById('address-perps-value').textContent = formatUSD(addrData.perpsValue);
+    document.getElementById('address-spot-value').textContent = formatUSD(addrData.spotValue);
+    document.getElementById('address-prediction-value').textContent = formatUSD(addrData.predictionValue);
+    document.getElementById('address-vault-value').textContent = formatUSD(addrData.vaultValue);
+    
+    // Update breakdown bar percentages
+    const total = addrData.totalValue || 1;
+    document.getElementById('bar-perps').style.width = (addrData.perpsValue / total * 100) + '%';
+    document.getElementById('bar-spot').style.width = (addrData.spotValue / total * 100) + '%';
+    document.getElementById('bar-prediction').style.width = (addrData.predictionValue / total * 100) + '%';
+    document.getElementById('bar-vault').style.width = (addrData.vaultValue / total * 100) + '%';
+    
+    // Perps Positions
+    const perpsContainer = document.getElementById('address-perps-positions');
+    if (addrData.perpsPositions && addrData.perpsPositions.length > 0) {
+        perpsContainer.innerHTML = addrData.perpsPositions.map(p => `
+            <div class="perps-position-item">
+                <span class="perps-position-pair">${p.pair}-USDT</span>
+                <span class="perps-position-side ${p.side}">${p.side.toUpperCase()}</span>
+                <span class="perps-position-value">${formatUSD(p.value)}</span>
+            </div>
+        `).join('');
+    } else {
+        perpsContainer.innerHTML = '<div class="account-empty">No positions</div>';
+    }
+    
+    // Spot Holdings
+    const spotContainer = document.getElementById('address-spot-holdings');
+    if (addrData.spotHoldings && addrData.spotHoldings.length > 0) {
+        spotContainer.innerHTML = addrData.spotHoldings.map(h => `
+            <div class="spot-holding-item">
+                <div class="spot-holding-coin">
+                    <span class="spot-holding-symbol">${h.symbol}</span>
+                    <span class="spot-holding-amount">${h.symbol === 'USDC' || h.symbol === 'USDT' ? formatNumber(h.amount) : h.amount.toFixed(4)}</span>
+                </div>
+                <div class="spot-holding-info">
+                    <div class="spot-holding-value">${formatUSD(h.value)}</div>
+                    <div class="spot-holding-percent">${h.percent}%</div>
+                </div>
+            </div>
+        `).join('');
+    } else {
+        spotContainer.innerHTML = '<div class="account-empty">No holdings</div>';
+    }
+    
+    // Prediction Positions
+    const predictionContainer = document.getElementById('address-prediction-positions');
+    if (addrData.predictionPositions && addrData.predictionPositions.length > 0) {
+        predictionContainer.innerHTML = addrData.predictionPositions.map(p => `
+            <div class="perps-position-item">
+                <span class="perps-position-pair">${p.market}</span>
+                <span class="perps-position-value">${formatUSD(p.value)}</span>
+            </div>
+        `).join('');
+    } else {
+        predictionContainer.innerHTML = '<div class="account-empty">No positions</div>';
+    }
+    
+    // Vault Deposits
+    const vaultContainer = document.getElementById('address-vault-deposits');
+    if (addrData.vaultDeposits && addrData.vaultDeposits.length > 0) {
+        vaultContainer.innerHTML = addrData.vaultDeposits.map(d => `
+            <div class="vault-deposit-item">
+                <span class="vault-deposit-name">${d.name}</span>
+                <span class="vault-deposit-value">${formatUSD(d.value)}</span>
+            </div>
+        `).join('');
+    } else {
+        vaultContainer.innerHTML = '<div class="account-empty">No deposits</div>';
+    }
+    
     loadAddressTransactions(address);
 }
 
@@ -1304,15 +1468,6 @@ function setAddressFilter(filter, btn) {
     }
     const address = document.getElementById('address-hash').textContent;
     loadAddressTransactions(address);
-}
-
-function setAddressTab(tab, btn) {
-    document.querySelectorAll('.address-tab').forEach(t => t.classList.remove('active'));
-    if (btn) {
-        btn.classList.add('active');
-    } else if (event && event.target) {
-        event.target.classList.add('active');
-    }
 }
 
 // Pagination

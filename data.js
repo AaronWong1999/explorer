@@ -242,6 +242,17 @@ let globalState = {
     totalWithdraw: 1098429600,          // 总提现
     totalIncome: 160032914,             // 总收入
     
+    // ========== $EDGE REPURCHASE ==========
+    repurchase: {
+        address: '0xf977814e90da44bfa03b6295a0616a897441acec',
+        totalAmount: 456230000,         // 累计回购数量 456.23M
+        totalValue: 192873986.06,       // 累计回购金额
+        amount24h: 6260000,             // 24h回购数量 6.26M
+        value24h: 1873986.06,           // 24h回购金额
+        amountChange24h: 14.8,          // 24h数量涨跌幅 %
+        valueChange24h: -7.93,          // 24h金额涨跌幅 %
+    },
+    
     // ========== EXPLORER INTERNAL ==========
     latestBatch: 18547,
     avgConfirmTime: 1.8,
@@ -758,13 +769,94 @@ function getAddress(address) {
             txs.push(tx);
         }
         
+        // Generate Perps Positions
+        const perpsPairs = ['BTC', 'ETH', 'SOL', 'ARB', 'OP', 'AVAX', 'DOGE', 'MATIC'];
+        const perpsPositions = [];
+        const numPerpsPositions = Math.floor(Math.random() * 4) + 1;
+        let perpsTotal = 0;
+        for (let i = 0; i < numPerpsPositions; i++) {
+            const pair = perpsPairs[Math.floor(Math.random() * perpsPairs.length)];
+            if (!perpsPositions.find(p => p.pair === pair)) {
+                const value = Math.random() * 50000 + 1000;
+                perpsTotal += value;
+                perpsPositions.push({
+                    pair: pair,
+                    side: Math.random() > 0.5 ? 'long' : 'short',
+                    size: (Math.random() * 10 + 0.1).toFixed(2),
+                    value: value
+                });
+            }
+        }
+        
+        // Generate Spot Holdings
+        const spotCoins = [
+            { symbol: 'USDC', price: 1 },
+            { symbol: 'USDT', price: 1 },
+            { symbol: 'BTC', price: 43250 },
+            { symbol: 'ETH', price: 2280 },
+            { symbol: 'SOL', price: 98 },
+            { symbol: 'ARB', price: 1.12 }
+        ];
+        const spotHoldings = [];
+        const numSpotHoldings = Math.floor(Math.random() * 4) + 2;
+        let spotTotal = 0;
+        const usedCoins = new Set();
+        for (let i = 0; i < numSpotHoldings; i++) {
+            const coinIdx = Math.floor(Math.random() * spotCoins.length);
+            const coin = spotCoins[coinIdx];
+            if (!usedCoins.has(coin.symbol)) {
+                usedCoins.add(coin.symbol);
+                const amount = coin.symbol === 'USDC' || coin.symbol === 'USDT' 
+                    ? Math.random() * 500000 + 10000 
+                    : Math.random() * 10 + 0.01;
+                const value = amount * coin.price;
+                spotTotal += value;
+                spotHoldings.push({
+                    symbol: coin.symbol,
+                    amount: amount,
+                    value: value
+                });
+            }
+        }
+        // Calculate percentages
+        spotHoldings.forEach(h => h.percent = (h.value / spotTotal * 100).toFixed(1));
+        spotHoldings.sort((a, b) => b.value - a.value);
+        
+        // Generate Prediction Positions
+        const predictionValue = Math.random() > 0.5 ? Math.random() * 20000 + 500 : 0;
+        const predictionPositions = predictionValue > 0 ? [
+            { market: 'BTC > 50K EOY', value: predictionValue * 0.6 },
+            { market: 'ETH > 3K Q1', value: predictionValue * 0.4 }
+        ] : [];
+        
+        // Generate Vault Deposits
+        const vaultValue = Math.random() > 0.3 ? Math.random() * 100000 + 5000 : 0;
+        const vaultDeposits = vaultValue > 0 ? [
+            { name: 'USDC Vault', value: vaultValue * 0.7 },
+            { name: 'ETH Vault', value: vaultValue * 0.3 }
+        ] : [];
+        
+        // Calculate total (must equal sum of all accounts)
+        const totalValue = perpsTotal + spotTotal + predictionValue + vaultValue;
+        
         globalState.addresses[address] = {
             address: address,
             txCount: txCount,
             volume: txs.reduce((sum, tx) => sum + tx.value, 0) * (txCount / txs.length),
             firstTx: now - txCount * 60000,
             lastTx: now - Math.random() * 60000,
-            transactions: txs
+            transactions: txs,
+            // Account Values
+            totalValue: totalValue,
+            perpsValue: perpsTotal,
+            spotValue: spotTotal,
+            predictionValue: predictionValue,
+            vaultValue: vaultValue,
+            // Positions/Holdings
+            perpsPositions: perpsPositions,
+            spotHoldings: spotHoldings,
+            predictionPositions: predictionPositions,
+            vaultDeposits: vaultDeposits
         };
     }
     

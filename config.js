@@ -32,6 +32,16 @@ const FeatureConfig = {
         'home.latestBatches.l1Tx': true,
         'home.latestBatches.status': true,
         'home.search': true,
+        
+        // ============ HOME - REPURCHASE ============
+        'home.repurchase': true,
+        'home.repurchase.address': true,
+        'home.repurchase.totalAmount': true,
+        'home.repurchase.totalValue': true,
+        'home.repurchase.24hAmount': true,
+        'home.repurchase.24hValue': true,
+        'home.repurchase.24hAmountChange': true,
+        'home.repurchase.24hValueChange': true,
 
         // ============ TRANSACTIONS PAGE ============
         'txs.statsBar': true,
@@ -120,12 +130,16 @@ const FeatureConfig = {
         'batchDetail.transactions': true,
 
         // ============ ADDRESS PAGE ============
-        'address.overview': true,
-        'address.overview.address': true,
-        'address.overview.txCount': true,
-        'address.overview.volume': true,
-        'address.overview.firstTx': true,
-        'address.overview.lastTx': true,
+        'address.accountOverview': true,
+        'address.perpsAccount': true,
+        'address.spotAccount': true,
+        'address.predictionAccount': true,
+        'address.vaultAccount': true,
+        'address.stats': true,
+        'address.stats.txCount': true,
+        'address.stats.volume': true,
+        'address.stats.firstTx': true,
+        'address.stats.lastTx': true,
         'address.filters': true,
         'address.filters.all': true,
         'address.filters.trading': true,
@@ -300,7 +314,13 @@ const FeatureConfig = {
     // Apply configuration to all pages
     applyAll() {
         // Apply to elements with data-feature attribute
+        // Exclude elements inside requirements page (they are for configuration, not display)
         document.querySelectorAll('[data-feature]').forEach(el => {
+            // Skip elements inside requirements page (configuration checkboxes)
+            if (el.closest('#page-requirements') || el.closest('.requirements-section')) {
+                return;
+            }
+            
             const featureId = el.dataset.feature;
             if (this.isEnabled(featureId)) {
                 el.style.display = '';

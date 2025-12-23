@@ -12,14 +12,14 @@
         <!-- Header -->
         <header class="header">
             <div class="header-left">
-                <a href="#" class="logo" onclick="navigateTo('home')">
+                <a href="#home" class="logo" onclick="event.preventDefault(); navigateTo('home')">
                     <span class="logo-icon">◈</span>
                     <span class="logo-text">edgeX</span>
                     <span class="logo-badge">交互原型 Explorer</span>
                 </a>
                 <nav class="main-nav">
-                    <a href="#" class="nav-link active" onclick="navigateTo('home')" data-i18n="nav.explorer">Explorer</a>
-                    <a href="#" class="nav-link" onclick="navigateTo('requirements')" data-i18n="nav.requirements">Requirements</a>
+                    <a href="#home" class="nav-link active" onclick="event.preventDefault(); navigateTo('home')" data-i18n="nav.explorer">Explorer</a>
+                    <a href="#requirements" class="nav-link" onclick="event.preventDefault(); navigateTo('requirements')" data-i18n="nav.requirements">Requirements</a>
                 </nav>
             </div>
             <div class="header-right">
@@ -124,6 +124,46 @@
                     </div>
                 </div>
 
+                <!-- $EDGE Repurchase Stats -->
+                <div class="repurchase-section" data-feature="home.repurchase">
+                    <div class="repurchase-header">
+                        <h2 class="repurchase-title">$EDGE REPURCHASE</h2>
+                        <div class="repurchase-address" data-feature="home.repurchase.address">
+                            <span class="repurchase-address-label" data-i18n="repurchase.address">回购地址</span>
+                            <a href="#address/0xf977814e90da44bfa03b6295a0616a897441acec" class="repurchase-address-link" id="repurchase-address" data-address="0xf977814e90da44bfa03b6295a0616a897441acec" onclick="event.preventDefault(); viewAddress(this.dataset.address)">0xf977814e90da44bfa03b6295a0616a897441acec</a>
+                            <button class="copy-btn" onclick="copyText('0xf977814e90da44bfa03b6295a0616a897441acec')">📋</button>
+                        </div>
+                    </div>
+                    <div class="repurchase-stats">
+                        <div class="repurchase-card">
+                            <div class="repurchase-main" data-feature="home.repurchase.totalAmount">
+                                <span class="repurchase-label" data-i18n="repurchase.totalAmount">累计回购数量</span>
+                                <span class="repurchase-value" id="repurchase-total-amount">456.23M</span>
+                            </div>
+                            <div class="repurchase-sub">
+                                <span class="repurchase-sub-item" data-feature="home.repurchase.24hAmount">
+                                    <span class="repurchase-sub-label" data-i18n="repurchase.24hAmount">过去24小时回购数量</span>
+                                    <span class="repurchase-sub-value" id="repurchase-24h-amount">6.26M</span>
+                                </span>
+                                <span class="repurchase-change positive" id="repurchase-24h-amount-change" data-feature="home.repurchase.24hAmountChange">↑ +14.8%</span>
+                            </div>
+                        </div>
+                        <div class="repurchase-card">
+                            <div class="repurchase-main" data-feature="home.repurchase.totalValue">
+                                <span class="repurchase-label" data-i18n="repurchase.totalValue">累计回购金额</span>
+                                <span class="repurchase-value" id="repurchase-total-value">$192,873,986.06</span>
+                            </div>
+                            <div class="repurchase-sub">
+                                <span class="repurchase-sub-item" data-feature="home.repurchase.24hValue">
+                                    <span class="repurchase-sub-label" data-i18n="repurchase.24hValue">过去24小时回购金额</span>
+                                    <span class="repurchase-sub-value" id="repurchase-24h-value">$1,873,986.06</span>
+                                </span>
+                                <span class="repurchase-change negative" id="repurchase-24h-value-change" data-feature="home.repurchase.24hValueChange">↓ -7.93%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Enhanced Search Box -->
                 <div class="search-container">
                     <div class="search-box" id="search-box">
@@ -167,7 +207,7 @@
                     <div class="data-panel">
                         <div class="panel-header">
                             <h2 data-i18n="home.latestTxs">Latest Transactions</h2>
-                            <a href="#" class="view-all" onclick="navigateTo('transactions')" data-i18n="home.viewAll">View All →</a>
+                            <a href="#transactions" class="view-all" onclick="event.preventDefault(); navigateTo('transactions')" data-i18n="home.viewAll">View All →</a>
                         </div>
                         <div class="table-container">
                             <table class="data-table">
@@ -191,7 +231,7 @@
                     <div class="data-panel">
                         <div class="panel-header">
                             <h2 data-i18n="home.latestBatches">Latest Batches</h2>
-                            <a href="#" class="view-all" onclick="navigateTo('batches')" data-i18n="home.viewAll">View All →</a>
+                            <a href="#batches" class="view-all" onclick="event.preventDefault(); navigateTo('batches')" data-i18n="home.viewAll">View All →</a>
                         </div>
                         <div class="table-container">
                             <table class="data-table">
@@ -352,8 +392,8 @@
             <!-- Transaction Detail Page -->
             <div id="page-tx-detail" class="page">
                 <div class="breadcrumb">
-                    <a href="#" onclick="navigateTo('home')">Explorer</a> / 
-                    <a href="#" onclick="navigateTo('transactions')" data-i18n="page.allTransactions">Transactions</a> / 
+                    <a href="#home" onclick="event.preventDefault(); navigateTo('home')">Explorer</a> / 
+                    <a href="#transactions" onclick="event.preventDefault(); navigateTo('transactions')" data-i18n="page.allTransactions">Transactions</a> / 
                     <span id="tx-detail-hash-breadcrumb">0x...</span>
                 </div>
                 
@@ -523,8 +563,8 @@
             <!-- Batch Detail Page -->
             <div id="page-batch-detail" class="page">
                 <div class="breadcrumb">
-                    <a href="#" onclick="navigateTo('home')">Explorer</a> / 
-                    <a href="#" onclick="navigateTo('batches')" data-i18n="page.allBatches">Batches</a> / 
+                    <a href="#home" onclick="event.preventDefault(); navigateTo('home')">Explorer</a> / 
+                    <a href="#batches" onclick="event.preventDefault(); navigateTo('batches')" data-i18n="page.allBatches">Batches</a> / 
                     <span id="batch-detail-id-breadcrumb">#0</span>
                 </div>
                 <div class="detail-container">
@@ -663,7 +703,7 @@
             <!-- Address Page -->
             <div id="page-address" class="page">
                 <div class="breadcrumb">
-                    <a href="#" onclick="navigateTo('home')">Explorer</a> / 
+                    <a href="#home" onclick="event.preventDefault(); navigateTo('home')">Explorer</a> / 
                     <span data-i18n="page.addressDetails">Address</span>
                 </div>
                 <div class="address-header">
@@ -673,31 +713,98 @@
                         <button class="copy-btn" onclick="copyToClipboard('address-hash')">📋</button>
                     </div>
                 </div>
-                <div class="address-stats">
-                    <div class="address-stat">
+                
+                <!-- Account Overview Section -->
+                <div class="account-overview" data-feature="address.accountOverview">
+                    <!-- Total Account Value -->
+                    <div class="account-total-card">
+                        <div class="account-total-header">
+                            <span class="account-total-label" data-i18n="address.totalValue">Total Account Value</span>
+                            <span class="account-total-value" id="address-total-value">$0</span>
+                        </div>
+                        <div class="account-breakdown-bar">
+                            <div class="breakdown-segment perps" id="bar-perps" style="width: 25%"></div>
+                            <div class="breakdown-segment spot" id="bar-spot" style="width: 35%"></div>
+                            <div class="breakdown-segment prediction" id="bar-prediction" style="width: 20%"></div>
+                            <div class="breakdown-segment vault" id="bar-vault" style="width: 20%"></div>
+                        </div>
+                        <div class="account-breakdown-legend">
+                            <span class="legend-item"><span class="legend-dot perps"></span><span data-i18n="address.perpsAccount">Perps</span></span>
+                            <span class="legend-item"><span class="legend-dot spot"></span><span data-i18n="address.spotAccount">Spot</span></span>
+                            <span class="legend-item"><span class="legend-dot prediction"></span><span data-i18n="address.predictionAccount">Prediction</span></span>
+                            <span class="legend-item"><span class="legend-dot vault"></span><span data-i18n="address.vaultAccount">Vault</span></span>
+                        </div>
+                    </div>
+                    
+                    <!-- Account Cards Grid -->
+                    <div class="account-cards-grid">
+                        <!-- Perps Account -->
+                        <div class="account-card perps-card" data-feature="address.perpsAccount">
+                            <div class="account-card-header">
+                                <span class="account-card-icon">📈</span>
+                                <span class="account-card-title" data-i18n="address.perpsAccount">Perps Account</span>
+                            </div>
+                            <div class="account-card-value" id="address-perps-value">$0</div>
+                            <div class="account-card-positions" id="address-perps-positions">
+                            </div>
+                        </div>
+                        
+                        <!-- Spot Account -->
+                        <div class="account-card spot-card" data-feature="address.spotAccount">
+                            <div class="account-card-header">
+                                <span class="account-card-icon">💰</span>
+                                <span class="account-card-title" data-i18n="address.spotAccount">Spot Account</span>
+                            </div>
+                            <div class="account-card-value" id="address-spot-value">$0</div>
+                            <div class="account-card-holdings" id="address-spot-holdings">
+                            </div>
+                        </div>
+                        
+                        <!-- Prediction Account -->
+                        <div class="account-card prediction-card" data-feature="address.predictionAccount">
+                            <div class="account-card-header">
+                                <span class="account-card-icon">🎯</span>
+                                <span class="account-card-title" data-i18n="address.predictionAccount">Prediction Account</span>
+                            </div>
+                            <div class="account-card-value" id="address-prediction-value">$0</div>
+                            <div class="account-card-positions" id="address-prediction-positions">
+                            </div>
+                        </div>
+                        
+                        <!-- Vault Account -->
+                        <div class="account-card vault-card" data-feature="address.vaultAccount">
+                            <div class="account-card-header">
+                                <span class="account-card-icon">🏦</span>
+                                <span class="account-card-title" data-i18n="address.vaultAccount">Vault Account</span>
+                            </div>
+                            <div class="account-card-value" id="address-vault-value">$0</div>
+                            <div class="account-card-deposits" id="address-vault-deposits">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Stats Row -->
+                <div class="address-stats" data-feature="address.stats">
+                    <div class="address-stat" data-feature="address.stats.txCount">
                         <span class="stat-value" id="address-tx-count">0</span>
                         <span class="stat-label" data-i18n="address.txCount">Total Transactions</span>
                     </div>
-                    <div class="address-stat">
+                    <div class="address-stat" data-feature="address.stats.volume">
                         <span class="stat-value" id="address-volume">$0</span>
                         <span class="stat-label" data-i18n="address.volume">Total Volume</span>
                     </div>
-                    <div class="address-stat">
+                    <div class="address-stat" data-feature="address.stats.firstTx">
                         <span class="stat-value" id="address-first-tx">-</span>
                         <span class="stat-label" data-i18n="address.firstTx">First Transaction</span>
                     </div>
-                    <div class="address-stat">
+                    <div class="address-stat" data-feature="address.stats.lastTx">
                         <span class="stat-value" id="address-last-tx">-</span>
                         <span class="stat-label" data-i18n="address.lastTx">Last Transaction</span>
                     </div>
                 </div>
 
-                <!-- Address Tabs -->
-                <div class="address-tabs">
-                    <button class="address-tab active" onclick="setAddressTab('transactions', this)" data-i18n="address.txHistory">Transactions</button>
-                    <button class="address-tab" onclick="setAddressTab('transfers', this)" data-i18n="address.transfers">Transfers</button>
-                </div>
-
+                <!-- Transaction Filters -->
                 <div class="address-filters">
                     <div class="filter-tabs">
                         <button class="filter-tab active" onclick="setAddressFilter('all', this)" data-i18n="home.all">All</button>
@@ -765,9 +872,9 @@
                             <span class="reserved-value coming-soon-text" data-i18n="blocks.comingSoon">Coming Soon</span>
                         </div>
                     </div>
-                    <button class="action-btn primary" onclick="navigateTo('batches')">
+                    <a href="#batches" class="action-btn primary" onclick="event.preventDefault(); navigateTo('batches')">
                         📦 <span data-i18n="blocks.viewBatches">View Current Batches</span>
-                    </button>
+                    </a>
                 </div>
 
                 <!-- Preview Table (Simulated) -->
@@ -847,7 +954,7 @@
                         <h2>1. 首页 (Home)</h2>
                         <div class="req-card">
                             <div class="req-preview">
-                                <button class="preview-btn" onclick="navigateTo('home')">👁 查看页面</button>
+                                <a href="#home" class="preview-btn" onclick="event.preventDefault(); navigateTo('home')">👁 查看页面</a>
                             </div>
                             
                             <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="home.stats" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 1.1 统计面板</label></h3>
@@ -903,6 +1010,23 @@
 
                             <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="home.search" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 1.4 搜索框</label></h3>
                             <p>支持搜索交易哈希、地址、批次ID、区块、订单ID</p>
+
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="home.repurchase" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 1.5 $EDGE 回购统计</label></h3>
+                            <p>展示 $EDGE 代币回购的统计数据</p>
+                            <table class="req-table req-table-checkable">
+                                <thead>
+                                    <tr><th></th><th>字段</th><th>说明</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.repurchase.address" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Repurchase Address</td><td>回购地址，可点击跳转</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.repurchase.totalAmount" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Total Amount</td><td>累计回购数量</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.repurchase.totalValue" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Total Value</td><td>累计回购金额</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.repurchase.24hAmount" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>24h Amount</td><td>过去24小时回购数量</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.repurchase.24hValue" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>24h Value</td><td>过去24小时回购金额</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.repurchase.24hAmountChange" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>24h Amount Change</td><td>24小时数量涨跌幅</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.repurchase.24hValueChange" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>24h Value Change</td><td>24小时金额涨跌幅</td></tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
 
@@ -911,7 +1035,7 @@
                         <h2>2. 交易列表页 (Transactions)</h2>
                         <div class="req-card">
                             <div class="req-preview">
-                                <button class="preview-btn" onclick="navigateTo('transactions')">👁 查看页面</button>
+                                <a href="#transactions" class="preview-btn" onclick="event.preventDefault(); navigateTo('transactions')">👁 查看页面</a>
                             </div>
 
                             <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="txs.statsBar" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 2.1 实时统计栏</label></h3>
@@ -1020,7 +1144,7 @@
                         <h2>4. 批次列表页 (Batches)</h2>
                         <div class="req-card">
                             <div class="req-preview">
-                                <button class="preview-btn" onclick="navigateTo('batches')">👁 查看页面</button>
+                                <a href="#batches" class="preview-btn" onclick="event.preventDefault(); navigateTo('batches')">👁 查看页面</a>
                             </div>
 
                             <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="batches.stats" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 4.1 实时统计栏</label></h3>
@@ -1099,25 +1223,38 @@
                         </div>
                     </div>
 
-                    <!-- 7. Address Page -->
+                    <!-- 6. Address Page -->
                     <div class="requirements-section" id="req-address">
                         <h2>6. 地址页 (Address)</h2>
                         <div class="req-card">
-                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="address.overview" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 6.1 地址概览</label></h3>
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="address.accountOverview" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 6.1 账户总览</label></h3>
+                            <p>显示账户总资产和各类账户占比分布条</p>
+                            <table class="req-table req-table-checkable">
+                                <thead>
+                                    <tr><th></th><th>账户类型</th><th>说明</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="address.perpsAccount" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Perps Account</td><td>合约账户，显示持仓列表（交易对、多空、金额）</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="address.spotAccount" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Spot Account</td><td>现货账户，显示持币列表（币种、数量、金额、占比）</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="address.predictionAccount" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Prediction Account</td><td>预测账户，显示预测仓位</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="address.vaultAccount" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Vault Account</td><td>金库账户，显示存款明细</td></tr>
+                                </tbody>
+                            </table>
+
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="address.stats" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 6.2 统计数据</label></h3>
                             <table class="req-table req-table-checkable">
                                 <thead>
                                     <tr><th></th><th>字段</th><th>说明</th></tr>
                                 </thead>
                                 <tbody>
-                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="address.overview.address" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Address</td><td>完整地址，可复制</td></tr>
-                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="address.overview.txCount" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Transactions</td><td>该地址交易总数</td></tr>
-                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="address.overview.volume" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Volume</td><td>该地址交易总量</td></tr>
-                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="address.overview.firstTx" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>First Tx</td><td>首次交易日期</td></tr>
-                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="address.overview.lastTx" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Last Tx</td><td>最近交易时间</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="address.stats.txCount" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Transactions</td><td>该地址交易总数</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="address.stats.volume" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Volume</td><td>该地址交易总量</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="address.stats.firstTx" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>First Tx</td><td>首次交易日期</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="address.stats.lastTx" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Last Tx</td><td>最近交易时间</td></tr>
                                 </tbody>
                             </table>
 
-                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="address.filters" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 6.2 交易历史筛选</label></h3>
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="address.filters" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 6.3 交易历史筛选</label></h3>
                             <ul class="feature-list">
                                 <li><label><input type="checkbox" class="feature-checkbox" data-feature="address.filters.all" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> <strong>All</strong> - 全部交易</label></li>
                                 <li><label><input type="checkbox" class="feature-checkbox" data-feature="address.filters.trading" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> <strong>Trading</strong> - 交易操作（下单、撤单、改单等）</label></li>
@@ -1127,7 +1264,7 @@
                                 <li><label><input type="checkbox" class="feature-checkbox" data-feature="address.filters.account" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> <strong>Account</strong> - 账户设置</label></li>
                             </ul>
 
-                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="address.table" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 6.3 交易历史表格</label></h3>
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="address.table" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 6.4 交易历史表格</label></h3>
                             <p>展示该地址的所有交易记录，包含类型、交易对、时间、金额、状态等信息。</p>
                         </div>
                     </div>
@@ -1137,7 +1274,7 @@
                         <h2><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="blocks" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 7. 区块列表页 (Blocks) - Edge Chain 升级储备页</label></h2>
                         <div class="req-card">
                             <div class="req-preview">
-                                <button class="preview-btn" onclick="navigateTo('blocks')">👁 查看页面</button>
+                                <a href="#blocks" class="preview-btn" onclick="event.preventDefault(); navigateTo('blocks')">👁 查看页面</a>
                             </div>
 
                             <h3>7.1 页面说明</h3>

@@ -31,6 +31,13 @@ const translations = {
         'stats.provenBatches': 'Proven',
         'stats.finalizedBatches': 'Finalized',
         
+        // Repurchase
+        'repurchase.address': 'Repurchase Address',
+        'repurchase.totalAmount': 'Total Repurchase Amount',
+        'repurchase.totalValue': 'Total Repurchase Value',
+        'repurchase.24hAmount': '24h Repurchase Amount',
+        'repurchase.24hValue': '24h Repurchase Value',
+        
         // Search
         'search.placeholder': 'Search by Tx Hash / Address / Batch ID / Block / Order ID',
         'search.button': 'Search',
@@ -299,6 +306,14 @@ const translations = {
         'address.positions': 'Positions',
         'address.orders': 'Open Orders',
         'address.transfers': 'Transfers',
+        'address.totalValue': 'Total Account Value',
+        'address.perpsAccount': 'Perps Account',
+        'address.spotAccount': 'Spot Account',
+        'address.predictionAccount': 'Prediction Account',
+        'address.vaultAccount': 'Vault Account',
+        'address.noPositions': 'No positions',
+        'address.noHoldings': 'No holdings',
+        'address.noDeposits': 'No deposits',
         
         // Footer
         'footer.docs': 'Docs',
@@ -396,6 +411,13 @@ const translations = {
         'stats.latestBatch': '最新批次',
         'stats.provenBatches': '已证明',
         'stats.finalizedBatches': '已确定',
+        
+        // Repurchase
+        'repurchase.address': '回购地址',
+        'repurchase.totalAmount': '累计回购数量',
+        'repurchase.totalValue': '累计回购金额',
+        'repurchase.24hAmount': '过去24小时回购数量',
+        'repurchase.24hValue': '过去24小时回购金额',
         
         // Search
         'search.placeholder': '搜索交易哈希 / 地址 / 批次ID / 区块 / 订单ID',
@@ -665,6 +687,14 @@ const translations = {
         'address.positions': '持仓',
         'address.orders': '挂单',
         'address.transfers': '转账',
+        'address.totalValue': '账户总资产',
+        'address.perpsAccount': '合约账户',
+        'address.spotAccount': '现货账户',
+        'address.predictionAccount': '预测账户',
+        'address.vaultAccount': '金库账户',
+        'address.noPositions': '暂无持仓',
+        'address.noHoldings': '暂无持币',
+        'address.noDeposits': '暂无存款',
         
         // Footer
         'footer.docs': '文档',
