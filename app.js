@@ -13,8 +13,8 @@ let currentTheme = 'light';
 
 // Initialize on load
 document.addEventListener('DOMContentLoaded', () => {
-    // Load saved theme (default: dark)
-    const savedTheme = localStorage.getItem('edgex-theme') || 'dark';
+    // Load saved theme (default: light)
+    const savedTheme = localStorage.getItem('edgex-theme') || 'light';
     setTheme(savedTheme);
     
     const savedLang = localStorage.getItem('edgex-lang') || 'zh';

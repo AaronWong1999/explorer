@@ -767,8 +767,8 @@ const translations = {
     }
 };
 
-// Current language
-let currentLang = localStorage.getItem('edgex-lang') || 'en';
+// Current language - default to Chinese
+let currentLang = localStorage.getItem('edgex-lang') || 'zh';
 
 // Get translation
 function t(key) {
