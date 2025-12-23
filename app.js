@@ -661,10 +661,9 @@ function hideSearchDropdown() {
 function initPopularSearches() {
     const container = document.getElementById('popular-searches');
     const popular = [
-        { text: 'BTC-USDT', type: 'pair' },
-        { text: 'ETH-USDT', type: 'pair' },
         { text: '#' + globalState.latestBatch, type: 'batch' },
         { text: '#' + (globalState.latestBatch - 1), type: 'batch' },
+        { text: '#' + (globalState.latestBatch - 2), type: 'batch' },
     ];
     
     container.innerHTML = popular.map(item => `
@@ -737,30 +736,54 @@ function performLiveSearch(query) {
     const resultsContainer = document.getElementById('search-results');
     const results = [];
     
+    // Search by 0x prefix - could be tx hash or address
     if (query.startsWith('0x')) {
-        if (query.length >= 10 && query.length <= 42) {
+        // If length matches address (42 chars), prioritize address
+        if (query.length === 42) {
             results.push({
                 type: 'address',
                 icon: '👤',
                 title: truncateHash(query, 10, 8),
                 subtitle: t('search.address'),
                 badge: 'address',
-                action: () => viewAddress(query.length === 42 ? query : generateAddress())
+                action: () => viewAddress(query)
             });
-        }
-        if (query.length >= 10) {
+        } 
+        // If length matches tx hash (66 chars), show as tx
+        else if (query.length === 66) {
             results.push({
                 type: 'tx',
                 icon: '📄',
                 title: truncateHash(query, 10, 8),
                 subtitle: t('search.txHash'),
                 badge: 'tx',
-                action: () => viewTransaction(query.length === 66 ? query : generateHash())
+                action: () => viewTransaction(query)
             });
         }
-    } else if (query.startsWith('#') || !isNaN(parseInt(query))) {
+        // For partial input, show both possibilities
+        else if (query.length >= 6) {
+            results.push({
+                type: 'address',
+                icon: '👤',
+                title: truncateHash(query, 10, 8) + '...',
+                subtitle: t('search.address'),
+                badge: 'address',
+                action: () => viewAddress(query.padEnd(42, '0'))
+            });
+            results.push({
+                type: 'tx',
+                icon: '📄',
+                title: truncateHash(query, 10, 8) + '...',
+                subtitle: t('search.txHash'),
+                badge: 'tx',
+                action: () => viewTransaction(query.padEnd(66, '0'))
+            });
+        }
+    } 
+    // Search by batch ID (# prefix or numeric)
+    else if (query.startsWith('#') || !isNaN(parseInt(query))) {
         const num = parseInt(query.replace('#', ''));
-        if (!isNaN(num)) {
+        if (!isNaN(num) && num > 0) {
             results.push({
                 type: 'batch',
                 icon: '📦',
@@ -770,59 +793,7 @@ function performLiveSearch(query) {
                 action: () => viewBatch(num)
             });
         }
-    } else if (query.toLowerCase().includes('ord')) {
-        results.push({
-            type: 'order',
-            icon: '📝',
-            title: query.toUpperCase(),
-            subtitle: t('search.order'),
-            badge: 'tx',
-            action: () => {
-                const tx = generateTransaction();
-                tx.orderId = query.toUpperCase();
-                viewTransaction(tx.hash);
-            }
-        });
     }
-    
-    // Add transaction type suggestions
-    const matchingTypes = TX_TYPES.filter(t => 
-        t.type.toLowerCase().includes(query.toLowerCase()) ||
-        t.label.toLowerCase().includes(query.toLowerCase())
-    ).slice(0, 3);
-    
-    matchingTypes.forEach(typeInfo => {
-        results.push({
-            type: 'filter',
-            icon: typeInfo.icon,
-            title: typeInfo.label,
-            subtitle: `Filter by ${typeInfo.category}`,
-            badge: 'filter',
-            action: () => {
-                navigateTo('transactions');
-                setTimeout(() => {
-                    const typeFilter = document.getElementById('tx-type-filter');
-                    if (typeFilter) {
-                        typeFilter.value = typeInfo.type;
-                        filterTransactions();
-                    }
-                }, 100);
-            }
-        });
-    });
-    
-    // Add recent transactions
-    const matchingTxs = globalState.transactions.slice(0, 3);
-    matchingTxs.forEach(tx => {
-        results.push({
-            type: 'tx',
-            icon: tx.typeIcon,
-            title: truncateHash(tx.hash, 10, 8),
-            subtitle: `${tx.pair} • ${tx.valueFormatted} • ${tx.statusIcon} ${getStatusLabel(tx.status)}`,
-            badge: 'tx',
-            action: () => viewTransaction(tx.hash)
-        });
-    });
     
     if (results.length === 0) {
         resultsContainer.innerHTML = `
@@ -855,9 +826,7 @@ function setSearchType(type) {
     const placeholders = {
         'tx': '0x...',
         'address': '0x...',
-        'batch': '#12345',
-        'block': '#12345',
-        'order': '#ORD-12345678'
+        'batch': '#12345'
     };
     input.placeholder = placeholders[type] || t('search.placeholder');
     input.focus();

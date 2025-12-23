@@ -866,35 +866,28 @@ function getAddress(address) {
 function searchData(query) {
     query = query.toLowerCase().trim();
     
-    // Check if it's a transaction hash
+    // Check if it's a transaction hash (0x + 64 hex chars = 66 total)
     if (query.startsWith('0x') && query.length === 66) {
         return { type: 'transaction', data: getTransaction(query) };
     }
     
-    // Check if it's an address
+    // Check if it's an address (0x + 40 hex chars = 42 total)
     if (query.startsWith('0x') && query.length === 42) {
         return { type: 'address', data: getAddress(query) };
     }
     
-    // Check if it's a batch ID
+    // Check if it's a batch ID (with # prefix)
     if (query.startsWith('#')) {
         const batchId = parseInt(query.slice(1));
-        if (!isNaN(batchId)) {
+        if (!isNaN(batchId) && batchId > 0) {
             return { type: 'batch', data: getBatch(batchId) };
         }
     }
     
-    // Check if it's a numeric batch ID
+    // Check if it's a numeric batch ID (without # prefix)
     const numericId = parseInt(query);
-    if (!isNaN(numericId) && numericId > 0 && numericId < 100000) {
+    if (!isNaN(numericId) && numericId > 0) {
         return { type: 'batch', data: getBatch(numericId) };
-    }
-    
-    // Check if it's an order ID
-    if (query.startsWith('#ord-') || query.startsWith('ord-')) {
-        const tx = generateTransaction();
-        tx.orderId = query.toUpperCase();
-        return { type: 'transaction', data: tx };
     }
     
     return { type: 'notfound', data: null };

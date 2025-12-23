@@ -39,7 +39,7 @@ const translations = {
         'repurchase.24hValue': '24h Repurchase Value',
         
         // Search
-        'search.placeholder': 'Search by Tx Hash / Address / Batch ID / Block / Order ID',
+        'search.placeholder': 'Search by Tx Hash / Address / Batch ID',
         'search.button': 'Search',
         'search.recentSearches': 'Recent Searches',
         'search.popularSearches': 'Popular',
@@ -420,7 +420,7 @@ const translations = {
         'repurchase.24hValue': '过去24小时回购金额',
         
         // Search
-        'search.placeholder': '搜索交易哈希 / 地址 / 批次ID / 区块 / 订单ID',
+        'search.placeholder': '搜索交易哈希 / 地址 / 批次ID',
         'search.button': '搜索',
         'search.recentSearches': '最近搜索',
         'search.popularSearches': '热门',
