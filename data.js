@@ -214,19 +214,20 @@ const TX_CATEGORIES = [
 ];
 
 // State - edgeX Explorer Stats
+// Data source: https://dune.com/edgex_dao/edgex-overview (2024-12-23)
 let globalState = {
     // ========== EXPLORER STATS ==========
     totalBatches: 18547,
     totalBlocks: 2847563,
-    totalTransactions: 156847523,
-    totalUsers: 167536,
+    totalTransactions: 777434,          // Daily Trades from Dune
+    totalUsers: 169905,                 // Total Users from Dune: 169,905
     
     // ========== PERPETUAL STATS (合约) ==========
-    perpTxCount: 142500000,             // 合约交易笔数
-    perpVolume: 578203874701,           // 合约交易量
-    perpOI: 786949767,                  // 未平仓合约
-    perpPairs: 18,                      // 合约交易对数
-    perpUsers: 145000,                  // 合约用户数
+    perpTxCount: 777434,                // Daily Trades from Dune: 777,434
+    perpVolume: 580491771392,           // Total Trading Volume from Dune: $580,491,771,392
+    perpOI: 748717858,                  // Open Interest from Dune: $748,717,858
+    perpPairs: 98,                      // Total Pairs from Dune: 98
+    perpUsers: 169905,                  // Total Users from Dune
     
     // ========== SPOT STATS (现货) ==========
     spotTxCount: 14347523,              // 现货交易笔数
@@ -235,20 +236,21 @@ let globalState = {
     spotUsers: 52000,                   // 现货用户数
     
     // ========== TVL & DEPOSITS ==========
-    totalTVL: 382801272,                // 总锁仓量
-    vaultTVL: 133346809,                // eStrategy TVL (from Dune: $133,346,809.57)
-    distinctDepositors: 75247,          // 总存款人
-    totalDeposit: 1481230872,           // 总充值
-    totalWithdraw: 1098429600,          // 总提现
-    totalIncome: 160032914,             // 总收入
+    totalTVL: 370715451,                // Total TVL from Dune: $370,715,451
+    vaultTVL: 370715451,                // Total TVL from Dune: $370,715,451
+    distinctDepositors: 75366,          // Distinct Depositors from Dune: 75,366
+    totalDeposit: 1482250629,           // Total Deposit from Dune: $1,482,250,629
+    totalWithdraw: 1111535179,          // Total Withdraw from Dune: $1,111,535,179
+    totalIncome: 160830065,             // Total Income from Dune: 160,830,065
+    income24h: 889586,                  // Last 24H Income from Dune: 889,586
     
     // ========== $EDGE REPURCHASE ==========
     repurchase: {
         address: '0xf977814e90da44bfa03b6295a0616a897441acec',
         totalAmount: 456230000,         // 累计回购数量 456.23M
-        totalValue: 192873986.06,       // 累计回购金额
+        totalValue: 192870000,          // 累计回购金额
         amount24h: 6260000,             // 24h回购数量 6.26M
-        value24h: 1873986.06,           // 24h回购金额
+        value24h: 1870000,              // 24h回购金额
         amountChange24h: 14.8,          // 24h数量涨跌幅 %
         valueChange24h: -7.93,          // 24h金额涨跌幅 %
     },

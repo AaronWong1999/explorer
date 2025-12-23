@@ -324,21 +324,22 @@ function updateStats() {
         if (el) el.textContent = text;
     };
     
-    // Stats Cards - Total values
-    setText('stat-total-txs', formatNumber(globalState.totalTransactions));
+    // Stats Cards - Total values (from Dune Analytics)
     setText('stat-total-users', formatNumber(globalState.totalUsers));
     setText('stat-perp-volume', formatUSD(globalState.perpVolume));
     setText('stat-perp-oi', formatUSD(globalState.perpOI));
     setText('stat-spot-volume', formatUSD(globalState.spotVolume));
     setText('stat-vault-tvl', formatUSD(globalState.vaultTVL));
+    setText('stat-total-income', formatNumber(globalState.totalIncome));
     
-    // Stats Cards - 24h values (using fake data for demo, static ratios)
-    setText('stat-txs-24h', formatNumber(Math.floor(globalState.totalTransactions * 0.05)));
+    // Stats Cards - 24h values
+    // Daily Vol from Dune: $2,283,021,778, use 24h Trading Volume: $4,926,545,427
     setText('stat-users-24h', formatNumber(Math.floor(globalState.totalUsers * 0.02)));
-    setText('stat-perp-volume-24h', formatUSD(globalState.perpVolume * 0.08));
+    setText('stat-perp-volume-24h', formatUSD(4926545427));    // Last 24h Trading Volume from Dune
     setText('stat-perp-oi-24h', formatUSD(globalState.perpOI * 0.03));
     setText('stat-spot-volume-24h', formatUSD(globalState.spotVolume * 0.06));
-    setText('stat-vault-tvl-24h', formatUSD(globalState.vaultTVL * 0.01));
+    setText('stat-vault-tvl-24h', formatUSD(-12085802));       // Change TVL in 24h from Dune: -12,085,802
+    setText('stat-income-24h', formatNumber(globalState.income24h));  // Last 24H Income from Dune: 889,586
     
     // Note: Change percentages are static in HTML, no need to update them dynamically
     // They should only change once per day in production

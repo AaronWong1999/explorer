@@ -26,8 +26,8 @@ const translations = {
         'stats.vaultTVL.24h': '24h Vault TVL',
         'stats.totalUsers.total': 'Total Users',
         'stats.totalUsers.24h': '24h Users',
-        'stats.totalTxs.total': 'Total Transactions',
-        'stats.totalTxs.24h': '24h Transactions',
+        'stats.totalIncome.total': 'Total Income',
+        'stats.totalIncome.24h': '24h Income',
         
         // Stats - Other
         'stats.totalTxs': 'Transactions',
@@ -426,8 +426,8 @@ const translations = {
         'stats.vaultTVL.24h': '过去24小时金库TVL',
         'stats.totalUsers.total': '累计用户数',
         'stats.totalUsers.24h': '过去24小时用户数',
-        'stats.totalTxs.total': '累计事务数',
-        'stats.totalTxs.24h': '过去24小时事务数',
+        'stats.totalIncome.total': '累计收入数',
+        'stats.totalIncome.24h': '过去24小时收入数',
         
         // Stats - Other
         'stats.totalTxs': '事务数',

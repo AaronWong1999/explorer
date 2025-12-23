@@ -17,7 +17,7 @@ const FeatureConfig = {
         'home.stats.spotVolume': true,
         'home.stats.vaultTVL': true,
         'home.stats.totalUsers': true,
-        'home.stats.totalTxs': true,
+        'home.stats.totalIncome': true,
         'home.latestTxs': true,
         'home.latestTxs.hash': true,
         'home.latestTxs.type': true,
