@@ -104,98 +104,24 @@
                 </div>
 
                 <!-- Row 2-3: Stats Cards Grid (8 cards, 4 per row) -->
+                <!-- Order: 收入、用户、回购数量、回购金额 | 合约OI、合约交易量、现货交易量、金库TVL -->
                 <div class="stats-cards-grid" data-feature="home.stats">
-                    <!-- $EDGE Repurchase Amount -->
-                    <div class="stat-card" data-feature="home.stats.repurchaseAmount">
+                    <!-- 1. Income (收入) -->
+                    <div class="stat-card" data-feature="home.stats.totalIncome">
                         <div class="stat-card-main">
-                            <span class="stat-card-label" data-i18n="stats.repurchaseAmount.total">累计回购EDGE数量</span>
-                            <span class="stat-card-value" id="repurchase-total-amount">456.23M</span>
+                            <span class="stat-card-label" data-i18n="stats.totalIncome.total">累计收入</span>
+                            <span class="stat-card-value" id="stat-total-income">$0</span>
                         </div>
                         <div class="stat-card-sub">
                             <span class="stat-card-sub-item">
-                                <span class="stat-card-sub-label" data-i18n="stats.repurchaseAmount.24h">过去24小时回购EDGE数量</span>
-                                <span class="stat-card-sub-value" id="repurchase-24h-amount">6.26M</span>
+                                <span class="stat-card-sub-label" data-i18n="stats.totalIncome.24h">过去24小时收入</span>
+                                <span class="stat-card-sub-value" id="stat-income-24h">$0</span>
                             </span>
-                            <span class="stat-card-change positive" id="repurchase-amount-change">↑ +14.8%</span>
+                            <span class="stat-card-change positive" id="stat-income-change">↑ +9.34%</span>
                         </div>
                     </div>
 
-                    <!-- $EDGE Repurchase Value -->
-                    <div class="stat-card" data-feature="home.stats.repurchaseValue">
-                        <div class="stat-card-main">
-                            <span class="stat-card-label" data-i18n="stats.repurchaseValue.total">累计回购EDGE金额</span>
-                            <span class="stat-card-value" id="repurchase-total-value">$192.87M</span>
-                        </div>
-                        <div class="stat-card-sub">
-                            <span class="stat-card-sub-item">
-                                <span class="stat-card-sub-label" data-i18n="stats.repurchaseValue.24h">过去24小时回购EDGE金额</span>
-                                <span class="stat-card-sub-value" id="repurchase-24h-value">$1.87M</span>
-                            </span>
-                            <span class="stat-card-change negative" id="repurchase-value-change">↓ -7.93%</span>
-                        </div>
-                    </div>
-
-                    <!-- Perp OI -->
-                    <div class="stat-card" data-feature="home.stats.perpOI">
-                        <div class="stat-card-main">
-                            <span class="stat-card-label" data-i18n="stats.perpOI.total">累计合约OI</span>
-                            <span class="stat-card-value" id="stat-perp-oi">$0</span>
-                        </div>
-                        <div class="stat-card-sub">
-                            <span class="stat-card-sub-item">
-                                <span class="stat-card-sub-label" data-i18n="stats.perpOI.24h">过去24小时合约OI</span>
-                                <span class="stat-card-sub-value" id="stat-perp-oi-24h">$0</span>
-                            </span>
-                            <span class="stat-card-change positive" id="stat-perp-oi-change">↑ +5.23%</span>
-                        </div>
-                    </div>
-
-                    <!-- Perp Volume -->
-                    <div class="stat-card" data-feature="home.stats.perpVolume">
-                        <div class="stat-card-main">
-                            <span class="stat-card-label" data-i18n="stats.perpVolume.total">累计合约交易量</span>
-                            <span class="stat-card-value" id="stat-perp-volume">$0</span>
-                        </div>
-                        <div class="stat-card-sub">
-                            <span class="stat-card-sub-item">
-                                <span class="stat-card-sub-label" data-i18n="stats.perpVolume.24h">过去24小时合约交易量</span>
-                                <span class="stat-card-sub-value" id="stat-perp-volume-24h">$0</span>
-                            </span>
-                            <span class="stat-card-change positive" id="stat-perp-volume-change">↑ +12.45%</span>
-                        </div>
-                    </div>
-
-                    <!-- Spot Volume -->
-                    <div class="stat-card" data-feature="home.stats.spotVolume">
-                        <div class="stat-card-main">
-                            <span class="stat-card-label" data-i18n="stats.spotVolume.total">累计现货交易量</span>
-                            <span class="stat-card-value" id="stat-spot-volume">$0</span>
-                        </div>
-                        <div class="stat-card-sub">
-                            <span class="stat-card-sub-item">
-                                <span class="stat-card-sub-label" data-i18n="stats.spotVolume.24h">过去24小时现货交易量</span>
-                                <span class="stat-card-sub-value" id="stat-spot-volume-24h">$0</span>
-                            </span>
-                            <span class="stat-card-change positive" id="stat-spot-volume-change">↑ +8.67%</span>
-                        </div>
-                    </div>
-
-                    <!-- Vault TVL -->
-                    <div class="stat-card" data-feature="home.stats.vaultTVL">
-                        <div class="stat-card-main">
-                            <span class="stat-card-label" data-i18n="stats.vaultTVL.total">累计金库TVL</span>
-                            <span class="stat-card-value" id="stat-vault-tvl">$0</span>
-                        </div>
-                        <div class="stat-card-sub">
-                            <span class="stat-card-sub-item">
-                                <span class="stat-card-sub-label" data-i18n="stats.vaultTVL.24h">过去24小时金库TVL</span>
-                                <span class="stat-card-sub-value" id="stat-vault-tvl-24h">$0</span>
-                            </span>
-                            <span class="stat-card-change positive" id="stat-vault-tvl-change">↑ +3.21%</span>
-                        </div>
-                    </div>
-
-                    <!-- Users -->
+                    <!-- 2. Users (用户数) -->
                     <div class="stat-card" data-feature="home.stats.totalUsers">
                         <div class="stat-card-main">
                             <span class="stat-card-label" data-i18n="stats.totalUsers.total">累计用户数</span>
@@ -210,18 +136,93 @@
                         </div>
                     </div>
 
-                    <!-- Income (收入) -->
-                    <div class="stat-card" data-feature="home.stats.totalIncome">
+                    <!-- 3. $EDGE Repurchase Amount (回购EDGE数量) -->
+                    <div class="stat-card" data-feature="home.stats.repurchaseAmount">
                         <div class="stat-card-main">
-                            <span class="stat-card-label" data-i18n="stats.totalIncome.total">累计收入数</span>
-                            <span class="stat-card-value" id="stat-total-income">0</span>
+                            <span class="stat-card-label" data-i18n="stats.repurchaseAmount.total">累计回购EDGE数量</span>
+                            <span class="stat-card-value" id="repurchase-total-amount">456.23M</span>
                         </div>
                         <div class="stat-card-sub">
                             <span class="stat-card-sub-item">
-                                <span class="stat-card-sub-label" data-i18n="stats.totalIncome.24h">过去24小时收入数</span>
-                                <span class="stat-card-sub-value" id="stat-income-24h">0</span>
+                                <span class="stat-card-sub-label" data-i18n="stats.repurchaseAmount.24h">过去24小时回购EDGE数量</span>
+                                <span class="stat-card-sub-value" id="repurchase-24h-amount">6.26M</span>
                             </span>
-                            <span class="stat-card-change positive" id="stat-income-change">↑ +9.34%</span>
+                            <span class="stat-card-change positive" id="repurchase-amount-change">↑ +14.8%</span>
+                        </div>
+                    </div>
+
+                    <!-- 4. $EDGE Repurchase Value (回购EDGE金额) -->
+                    <div class="stat-card" data-feature="home.stats.repurchaseValue">
+                        <div class="stat-card-main">
+                            <span class="stat-card-label" data-i18n="stats.repurchaseValue.total">累计回购EDGE金额</span>
+                            <span class="stat-card-value" id="repurchase-total-value">$192.87M</span>
+                        </div>
+                        <div class="stat-card-sub">
+                            <span class="stat-card-sub-item">
+                                <span class="stat-card-sub-label" data-i18n="stats.repurchaseValue.24h">过去24小时回购EDGE金额</span>
+                                <span class="stat-card-sub-value" id="repurchase-24h-value">$1.87M</span>
+                            </span>
+                            <span class="stat-card-change negative" id="repurchase-value-change">↓ -7.93%</span>
+                        </div>
+                    </div>
+
+                    <!-- 5. Perp OI (合约OI) -->
+                    <div class="stat-card" data-feature="home.stats.perpOI">
+                        <div class="stat-card-main">
+                            <span class="stat-card-label" data-i18n="stats.perpOI.total">累计合约OI</span>
+                            <span class="stat-card-value" id="stat-perp-oi">$0</span>
+                        </div>
+                        <div class="stat-card-sub">
+                            <span class="stat-card-sub-item">
+                                <span class="stat-card-sub-label" data-i18n="stats.perpOI.24h">过去24小时合约OI</span>
+                                <span class="stat-card-sub-value" id="stat-perp-oi-24h">$0</span>
+                            </span>
+                            <span class="stat-card-change positive" id="stat-perp-oi-change">↑ +5.23%</span>
+                        </div>
+                    </div>
+
+                    <!-- 6. Perp Volume (合约交易量) -->
+                    <div class="stat-card" data-feature="home.stats.perpVolume">
+                        <div class="stat-card-main">
+                            <span class="stat-card-label" data-i18n="stats.perpVolume.total">累计合约交易量</span>
+                            <span class="stat-card-value" id="stat-perp-volume">$0</span>
+                        </div>
+                        <div class="stat-card-sub">
+                            <span class="stat-card-sub-item">
+                                <span class="stat-card-sub-label" data-i18n="stats.perpVolume.24h">过去24小时合约交易量</span>
+                                <span class="stat-card-sub-value" id="stat-perp-volume-24h">$0</span>
+                            </span>
+                            <span class="stat-card-change positive" id="stat-perp-volume-change">↑ +12.45%</span>
+                        </div>
+                    </div>
+
+                    <!-- 7. Spot Volume (现货交易量) -->
+                    <div class="stat-card" data-feature="home.stats.spotVolume">
+                        <div class="stat-card-main">
+                            <span class="stat-card-label" data-i18n="stats.spotVolume.total">累计现货交易量</span>
+                            <span class="stat-card-value" id="stat-spot-volume">$0</span>
+                        </div>
+                        <div class="stat-card-sub">
+                            <span class="stat-card-sub-item">
+                                <span class="stat-card-sub-label" data-i18n="stats.spotVolume.24h">过去24小时现货交易量</span>
+                                <span class="stat-card-sub-value" id="stat-spot-volume-24h">$0</span>
+                            </span>
+                            <span class="stat-card-change positive" id="stat-spot-volume-change">↑ +8.67%</span>
+                        </div>
+                    </div>
+
+                    <!-- 8. Vault TVL (金库TVL) -->
+                    <div class="stat-card" data-feature="home.stats.vaultTVL">
+                        <div class="stat-card-main">
+                            <span class="stat-card-label" data-i18n="stats.vaultTVL.total">累计金库TVL</span>
+                            <span class="stat-card-value" id="stat-vault-tvl">$0</span>
+                        </div>
+                        <div class="stat-card-sub">
+                            <span class="stat-card-sub-item">
+                                <span class="stat-card-sub-label" data-i18n="stats.vaultTVL.24h">过去24小时金库TVL</span>
+                                <span class="stat-card-sub-value" id="stat-vault-tvl-24h">$0</span>
+                            </span>
+                            <span class="stat-card-change positive" id="stat-vault-tvl-change">↑ +3.21%</span>
                         </div>
                     </div>
                 </div>

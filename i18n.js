@@ -426,8 +426,8 @@ const translations = {
         'stats.vaultTVL.24h': '过去24小时金库TVL',
         'stats.totalUsers.total': '累计用户数',
         'stats.totalUsers.24h': '过去24小时用户数',
-        'stats.totalIncome.total': '累计收入数',
-        'stats.totalIncome.24h': '过去24小时收入数',
+        'stats.totalIncome.total': '累计收入',
+        'stats.totalIncome.24h': '过去24小时收入',
         
         // Stats - Other
         'stats.totalTxs': '事务数',
