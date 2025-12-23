@@ -215,6 +215,7 @@
                                         <th data-i18n="table.type" data-feature="home.latestTxs.type">Type</th>
                                         <th data-i18n="table.time" data-feature="home.latestTxs.time">Time</th>
                                         <th data-i18n="table.user" data-feature="home.latestTxs.user">User</th>
+                                        <th data-i18n="table.batch" data-feature="home.latestTxs.batch">Batch</th>
                                         <th data-i18n="table.status" data-feature="home.latestTxs.status">Status</th>
                                     </tr>
                                 </thead>
@@ -1000,6 +1001,7 @@
                                     <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.latestTxs.type" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Type</td><td>交易类型，带颜色标签</td></tr>
                                     <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.latestTxs.time" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Time</td><td>相对时间 (如 "2s ago")</td></tr>
                                     <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.latestTxs.user" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>User</td><td>用户地址，点击跳转地址页</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.latestTxs.batch" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Batch</td><td>所属批次，点击跳转批次详情</td></tr>
                                     <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.latestTxs.status" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Status</td><td>交易状态</td></tr>
                                 </tbody>
                             </table>

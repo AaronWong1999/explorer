@@ -398,6 +398,7 @@ function updateLatestTransactions() {
             <td><span class="type-cell ${tx.type}" title="${getTypeLabel(tx.type)}">${tx.typeIcon} ${getTypeLabel(tx.type)}</span></td>
             <td class="time-cell">${formatTimeI18n(tx.timestamp)}</td>
             <td class="address-cell">${truncateHash(tx.user, 6, 4)}</td>
+            <td class="hash-cell"><a href="#batch/${tx.batchId}" onclick="event.stopPropagation(); viewBatch(${tx.batchId})">#${tx.batchId}</a></td>
             <td><span class="status-cell ${tx.status}" style="--status-color: ${tx.statusColor}">${tx.statusIcon} ${getStatusLabel(tx.status)}</span></td>
         </tr>
     `).join('');

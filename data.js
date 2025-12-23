@@ -389,101 +389,32 @@ function getBatchStatusInfo(status) {
     return BATCH_STATUS.find(s => s.status === status) || BATCH_STATUS[0];
 }
 
-// Transaction Generator
+// Transaction Generator - Simplified for universal display
 function generateTransaction(timestamp = Date.now()) {
     const txType = getWeightedRandomType();
-    
-    // Select pair based on transaction type market
-    let pair;
-    if (txType.market === 'perp') {
-        pair = getRandomItem(PERP_PAIRS);
-    } else if (txType.market === 'spot') {
-        pair = getRandomItem(SPOT_PAIRS);
-    } else {
-        // 'both' - random choice
-        pair = Math.random() > 0.6 ? getRandomItem(PERP_PAIRS) : getRandomItem(SPOT_PAIRS);
-    }
-    
-    // Side: long/short for perp, buy/sell for spot
-    const isPerp = pair.market === 'perp';
-    const side = isPerp ? (Math.random() > 0.5 ? 'long' : 'short') : (Math.random() > 0.5 ? 'buy' : 'sell');
-    
-    const orderType = getRandomItem(ORDER_TYPES);
     const statusInfo = getWeightedRandomStatus();
-    
-    // Price variation: ±0.5%
-    const priceVariation = (Math.random() - 0.5) * 0.01;
-    const price = pair.basePrice * (1 + priceVariation);
-    
-    // Size based on pair
-    let size;
-    if (pair.symbol.includes('BTC')) {
-        size = Math.random() * 2 + 0.01;
-    } else if (pair.symbol.includes('ETH')) {
-        size = Math.random() * 20 + 0.1;
-    } else if (pair.symbol.includes('PEPE')) {
-        size = Math.floor(Math.random() * 100000000) + 1000000;
-    } else {
-        size = Math.random() * 1000 + 10;
-    }
-    
-    const value = price * size;
-    const feeRate = Math.random() > 0.5 ? 0.00012 : 0.00038;
-    const fee = value * feeRate;
-    
     const userAddress = generateAddress();
-    const counterparty = generateAddress();
+    
+    // Ensure every transaction belongs to a valid batch
     const batchId = globalState.latestBatch - Math.floor(Math.random() * 10);
     
-    // Leverage for perp only
-    const leverage = isPerp ? Math.floor(Math.random() * 20) + 1 : null;
-    
+    // Core fields only - used by all transaction types
     return {
+        // Required fields for list display
         hash: generateHash(),
         type: txType.type,
-        typeLabel: txType.label,
         typeIcon: txType.icon,
         category: txType.category,
-        market: pair.market,                    // 'perp' or 'spot'
-        marketLabel: isPerp ? 'Perpetual' : 'Spot',
-        pair: pair.symbol,
-        side: side,
-        sideLabel: isPerp ? (side === 'long' ? 'Long' : 'Short') : (side === 'buy' ? 'Buy' : 'Sell'),
-        orderType: orderType,
-        price: price,
-        priceFormatted: price.toFixed(pair.decimals),
-        size: size,
-        sizeFormatted: pair.symbol.includes('BTC') ? size.toFixed(4) : 
-                       pair.symbol.includes('PEPE') ? Math.floor(size).toLocaleString() :
-                       size.toFixed(2),
-        value: value,
-        valueFormatted: formatUSD(value),
-        fee: fee,
-        feeFormatted: '$' + fee.toFixed(2),
-        feeRate: feeRate === 0.00012 ? 'Maker' : 'Taker',
         user: userAddress,
-        counterparty: counterparty,
         timestamp: timestamp,
-        timeFormatted: formatTime(timestamp),
-        dateTime: formatDateTime(timestamp),
         status: statusInfo.status,
-        statusLabel: statusInfo.label,
         statusIcon: statusInfo.icon,
         statusColor: statusInfo.color,
         batchId: batchId,
+        
+        // Detail page fields (lazy loaded when needed)
         positionInBatch: Math.floor(Math.random() * 1000) + 1,
-        l1TxHash: generateHash(),
-        stateRootBefore: generateHash(),
-        stateRootAfter: generateHash(),
-        orderId: '#ORD-' + Math.floor(Math.random() * 100000000),
-        cloid: '0x' + Math.random().toString(16).slice(2, 34),
-        leverage: leverage,
-        // Sequencer info
         sequenceNumber: globalState.totalTransactions + Math.floor(Math.random() * 100),
-        sequencedAt: timestamp + 100,
-        // Proof info
-        proofSubmittedAt: statusInfo.status === 'proven' || statusInfo.status === 'finalized' ? timestamp + 60000 : null,
-        proofVerifiedAt: statusInfo.status === 'finalized' ? timestamp + 120000 : null,
     };
 }
 

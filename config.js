@@ -23,6 +23,7 @@ const FeatureConfig = {
         'home.latestTxs.type': true,
         'home.latestTxs.time': true,
         'home.latestTxs.user': true,
+        'home.latestTxs.batch': true,
         'home.latestTxs.status': true,
         'home.latestBatches': true,
         'home.latestBatches.id': true,
@@ -339,7 +340,8 @@ const FeatureConfig = {
             1: 'home.latestTxs.type',
             2: 'home.latestTxs.time',
             3: 'home.latestTxs.user',
-            4: 'home.latestTxs.status'
+            4: 'home.latestTxs.batch',
+            5: 'home.latestTxs.status'
         });
 
         // Home - Latest Batches
