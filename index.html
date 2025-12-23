@@ -164,37 +164,6 @@
                     </div>
                 </div>
 
-                <!-- Enhanced Search Box -->
-                <div class="search-container">
-                    <div class="search-box" id="search-box">
-                        <span class="search-icon">🔍</span>
-                        <input type="text" id="search-input" 
-                               data-i18n-placeholder="search.placeholder"
-                               placeholder="Search by Tx Hash / Address / Batch ID" 
-                               onfocus="showSearchDropdown()"
-                               oninput="handleSearchInput(event)"
-                               onkeypress="handleSearch(event)">
-                        <button class="search-btn" onclick="performSearch()" data-i18n="search.button">Search</button>
-                        
-                        <!-- Search Dropdown -->
-                        <div class="search-dropdown" id="search-dropdown">
-                            <div class="search-section" id="search-results-section" style="display: none;">
-                                <div class="search-section-title" data-i18n="search.searching">Searching...</div>
-                                <div class="search-results" id="search-results"></div>
-                            </div>
-                            <div class="search-section" id="recent-searches-section">
-                                <div class="search-section-title" data-i18n="search.recentSearches">Recent Searches</div>
-                                <div class="recent-searches" id="recent-searches"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="search-tags">
-                        <span class="search-tag" onclick="setSearchType('tx')">Tx Hash</span>
-                        <span class="search-tag" onclick="setSearchType('address')">Address</span>
-                        <span class="search-tag" onclick="setSearchType('batch')">Batch ID</span>
-                    </div>
-                </div>
-
                 <!-- Two Column Layout -->
                 <div class="two-column-layout">
                     <!-- Latest Transactions -->
@@ -242,6 +211,41 @@
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Enhanced Search Box -->
+                <div class="search-container" data-feature="home.search">
+                    <div class="search-box" id="search-box">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="search-input" 
+                               data-i18n-placeholder="search.placeholder"
+                               placeholder="Search by Tx Hash / Address / Batch ID" 
+                               onfocus="showSearchDropdown()"
+                               oninput="handleSearchInput(event)"
+                               onkeypress="handleSearch(event)">
+                        <button class="search-btn" onclick="performSearch()" data-i18n="search.button">Search</button>
+                        
+                        <!-- Search Dropdown -->
+                        <div class="search-dropdown" id="search-dropdown">
+                            <div class="search-section" id="search-results-section" style="display: none;">
+                                <div class="search-section-title" data-i18n="search.searching">Searching...</div>
+                                <div class="search-results" id="search-results"></div>
+                            </div>
+                            <div class="search-section" id="recent-searches-section" style="display: none;" data-feature="home.search.recentSearches">
+                                <div class="search-section-title" data-i18n="search.recentSearches">Recent Searches</div>
+                                <div class="recent-searches" id="recent-searches"></div>
+                            </div>
+                            <div class="search-section" id="popular-searches-section" data-feature="home.search.popularSearches">
+                                <div class="search-section-title" data-i18n="search.popularSearches">Popular (24h)</div>
+                                <div class="popular-searches" id="popular-searches"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="search-tags">
+                        <span class="search-tag" onclick="setSearchType('tx')">Tx Hash</span>
+                        <span class="search-tag" onclick="setSearchType('address')">Address</span>
+                        <span class="search-tag" onclick="setSearchType('batch')">Batch ID</span>
                     </div>
                 </div>
 
@@ -1003,7 +1007,16 @@
                             </table>
 
                             <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="home.search" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 1.4 搜索框</label></h3>
-                            <p>支持搜索交易哈希、地址、批次ID、区块、订单ID</p>
+                            <p>支持搜索交易哈希、地址、批次ID</p>
+                            <table class="req-table req-table-checkable">
+                                <thead>
+                                    <tr><th></th><th>功能</th><th>说明</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.search.recentSearches" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Recent Searches</td><td>最近搜索历史</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.search.popularSearches" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Popular Searches</td><td>24小时热门搜索地址</td></tr>
+                                </tbody>
+                            </table>
 
                             <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="home.repurchase" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 1.5 $EDGE 回购统计</label></h3>
                             <p>展示 $EDGE 代币回购的统计数据</p>

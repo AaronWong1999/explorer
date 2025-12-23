@@ -32,6 +32,8 @@ const FeatureConfig = {
         'home.latestBatches.l1Tx': true,
         'home.latestBatches.status': true,
         'home.search': true,
+        'home.search.recentSearches': true,
+        'home.search.popularSearches': true,
         
         // ============ HOME - REPURCHASE ============
         'home.repurchase': true,

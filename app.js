@@ -312,6 +312,8 @@ function initHomePage() {
     updateLatestBatches();
     updateLiveFeed();
     initSearchTypeDropdowns();
+    initPopularSearches();
+    updateRecentSearches();
     startRealTimeUpdates();
 }
 
@@ -675,6 +677,22 @@ function updateRecentSearches() {
     `).join('');
 }
 
+function initPopularSearches() {
+    const container = document.getElementById('popular-searches');
+    if (!container) return;
+    
+    // Get unique addresses from recent transactions (simulating 24h hot addresses)
+    const hotAddresses = globalState.transactions
+        .slice(0, 50)
+        .map(tx => tx.user)
+        .filter((addr, i, arr) => arr.indexOf(addr) === i)
+        .slice(0, 5);
+    
+    container.innerHTML = hotAddresses.map(addr => `
+        <span class="popular-search-item" onclick="quickSearch('${addr}')">${truncateHash(addr, 6, 4)}</span>
+    `).join('');
+}
+
 function addRecentSearch(query, type) {
     recentSearches = recentSearches.filter(s => s.query !== query);
     recentSearches.unshift({ query, type, time: Date.now() });
@@ -721,9 +739,10 @@ function handleSearchInput(event) {
 function performLiveSearch(query) {
     const resultsContainer = document.getElementById('search-results');
     const results = [];
+    const queryLower = query.toLowerCase();
     
-    // Search by 0x prefix - could be tx hash or address
-    if (query.startsWith('0x')) {
+    // Search by 0x prefix - could be tx hash or address (case insensitive)
+    if (queryLower.startsWith('0x')) {
         // If length matches address (42 chars), prioritize address
         if (query.length === 42) {
             results.push({
@@ -732,7 +751,7 @@ function performLiveSearch(query) {
                 title: truncateHash(query, 10, 8),
                 subtitle: t('search.address'),
                 badge: 'address',
-                action: () => viewAddress(query)
+                action: () => viewAddress(query.toLowerCase())
             });
         } 
         // If length matches tx hash (66 chars), show as tx
@@ -743,14 +762,14 @@ function performLiveSearch(query) {
                 title: truncateHash(query, 10, 8),
                 subtitle: t('search.txHash'),
                 badge: 'tx',
-                action: () => viewTransaction(query)
+                action: () => viewTransaction(query.toLowerCase())
             });
         }
         // For partial input, show suggestions from existing data
         else if (query.length >= 4) {
             // Find matching transactions
             const matchingTxs = globalState.transactions.filter(tx => 
-                tx.hash.toLowerCase().includes(query.toLowerCase())
+                tx.hash.toLowerCase().includes(queryLower)
             ).slice(0, 2);
             
             matchingTxs.forEach(tx => {
@@ -768,7 +787,7 @@ function performLiveSearch(query) {
             const matchingAddrs = globalState.transactions
                 .map(tx => tx.user)
                 .filter((addr, i, arr) => arr.indexOf(addr) === i)
-                .filter(addr => addr.toLowerCase().includes(query.toLowerCase()))
+                .filter(addr => addr.toLowerCase().includes(queryLower))
                 .slice(0, 2);
             
             matchingAddrs.forEach(addr => {
