@@ -652,6 +652,33 @@ function getTransaction(hash) {
         tx = generateTransaction();
         tx.hash = hash;
     }
+    
+    // Generate detail page fields on demand (lazy loading)
+    if (!tx.pair) {
+        const pairs = ['BTC-USD', 'ETH-USD', 'SOL-USD', 'ARB-USD', 'OP-USD', 'AVAX-USD', 'MATIC-USD', 'LINK-USD', 'DOGE-USD', 'LTC-USD'];
+        tx.pair = pairs[Math.floor(Math.random() * pairs.length)];
+        tx.side = Math.random() > 0.5 ? 'long' : 'short';
+        tx.price = Math.random() * 50000 + 100;
+        tx.priceFormatted = tx.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        tx.size = Math.random() * 100 + 0.01;
+        tx.sizeFormatted = tx.size.toFixed(4);
+        tx.value = tx.price * tx.size;
+        tx.valueFormatted = '$' + tx.value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        tx.fee = tx.value * 0.0003;
+        tx.feeFormatted = '$' + tx.fee.toFixed(4);
+        tx.feeRate = Math.random() > 0.5 ? 'Maker' : 'Taker';
+        tx.orderType = ['Market', 'Limit', 'Stop Market', 'Stop Limit', 'TWAP'][Math.floor(Math.random() * 5)];
+        tx.leverage = Math.floor(Math.random() * 20) + 1;
+        tx.orderId = 'ORD-' + Math.random().toString(36).substring(2, 10).toUpperCase();
+        tx.cloid = '0x' + Math.random().toString(16).substring(2, 18);
+        tx.counterparty = generateAddress();
+        tx.l1TxHash = generateHash();
+        tx.stateRootBefore = generateHash();
+        tx.stateRootAfter = generateHash();
+        tx.proofVerifiedAt = tx.status === 'finalized' ? tx.timestamp + 120000 : null;
+        tx.dateTime = formatDateTime(tx.timestamp);
+    }
+    
     return tx;
 }
 

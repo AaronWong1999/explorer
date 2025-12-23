@@ -480,29 +480,14 @@ function startRealTimeUpdates() {
     }, 300 + Math.random() * 700);
     updateIntervals.push(txInterval);
     
-    // Add special events with various types
+    // Add special events (reuse addNewTransaction for data consistency)
     const specialEventInterval = setInterval(() => {
-        const specialTypes = ['deposit', 'withdraw', 'liquidation', 'vaultDeposit', 'stake', 'delegate', 'updateLeverage'];
-        const randomType = specialTypes[Math.floor(Math.random() * specialTypes.length)];
-        
-        const tx = generateTransaction();
-        const typeInfo = TX_TYPES.find(t => t.type === randomType);
-        if (typeInfo) {
-            tx.type = typeInfo.type;
-            tx.typeLabel = typeInfo.label;
-            tx.typeIcon = typeInfo.icon;
-            tx.category = typeInfo.category;
-        }
-        
-        globalState.transactions.unshift(tx);
-        if (globalState.transactions.length > 1000) {
-            globalState.transactions.pop();
-        }
-        
+        const newTx = addNewTransaction();
         if (currentPage === 'home') {
+            updateLatestTransactions();
             updateLiveFeed();
         } else if (currentPage === 'transactions') {
-            updateTransactionsPageRealtime(tx);
+            updateTransactionsPageRealtime(newTx);
         }
     }, 3000 + Math.random() * 5000);
     updateIntervals.push(specialEventInterval);
@@ -538,11 +523,9 @@ function updateTransactionsPageRealtime(newTx) {
     
     const typeFilter = document.getElementById('tx-type-filter')?.value || 'all';
     const statusFilter = document.getElementById('tx-status-filter')?.value || 'all';
-    const pairFilter = document.getElementById('tx-pair-filter')?.value || 'all';
     
     if (typeFilter !== 'all' && newTx.type !== typeFilter) return;
     if (statusFilter !== 'all' && newTx.status !== statusFilter) return;
-    if (pairFilter !== 'all' && newTx.pair !== pairFilter) return;
     
     const tbody = document.getElementById('all-transactions');
     if (!tbody) return;
@@ -553,11 +536,7 @@ function updateTransactionsPageRealtime(newTx) {
     newRow.innerHTML = `
         <td class="hash-cell">${truncateHash(newTx.hash)}</td>
         <td><span class="type-cell ${newTx.type}">${newTx.typeIcon} ${getTypeLabel(newTx.type)}</span></td>
-        <td>${newTx.pair}</td>
-        <td class="side-cell ${newTx.side}">${getSideLabel(newTx.side)}</td>
-        <td>${newTx.priceFormatted}</td>
-        <td>${newTx.sizeFormatted}</td>
-        <td>${newTx.valueFormatted}</td>
+        <td class="hash-cell"><a href="#batch/${newTx.batchId}" onclick="event.stopPropagation(); viewBatch(${newTx.batchId})">#${newTx.batchId}</a></td>
         <td class="time-cell">${formatTimeI18n(newTx.timestamp)}</td>
         <td class="address-cell">${truncateHash(newTx.user, 6, 4)}</td>
         <td><span class="status-cell ${newTx.status}" style="--status-color: ${newTx.statusColor}">${newTx.statusIcon} ${getStatusLabel(newTx.status)}</span></td>
@@ -777,7 +756,7 @@ function performLiveSearch(query) {
                     type: 'tx',
                     icon: '📄',
                     title: truncateHash(tx.hash, 10, 8),
-                    subtitle: `${tx.typeIcon} ${getTypeLabel(tx.type)} • ${tx.pair}`,
+                    subtitle: `${tx.typeIcon} ${getTypeLabel(tx.type)}`,
                     badge: 'tx',
                     action: () => viewTransaction(tx.hash)
                 });
@@ -840,7 +819,7 @@ function performLiveSearch(query) {
                 type: 'tx',
                 icon: '📄',
                 title: truncateHash(tx.hash, 10, 8),
-                subtitle: `${tx.typeIcon} ${getTypeLabel(tx.type)} • ${tx.pair}`,
+                subtitle: `${tx.typeIcon} ${getTypeLabel(tx.type)}`,
                 badge: 'tx',
                 action: () => viewTransaction(tx.hash)
             });
@@ -1320,10 +1299,7 @@ function initBatchDetailPage(id) {
         <tr onclick="viewTransaction('${tx.hash}')">
             <td class="hash-cell">${truncateHash(tx.hash)}</td>
             <td><span class="type-cell ${tx.type}">${tx.typeIcon} ${getTypeLabel(tx.type)}</span></td>
-            <td>${tx.pair}</td>
-            <td class="side-cell ${tx.side}">${getSideLabel(tx.side)}</td>
-            <td>${tx.priceFormatted}</td>
-            <td>${tx.sizeFormatted}</td>
+            <td class="time-cell">${formatTimeI18n(tx.timestamp)}</td>
             <td class="address-cell">${truncateHash(tx.user, 6, 4)}</td>
             <td><span class="status-cell ${tx.status}" style="--status-color: ${tx.statusColor}">${tx.statusIcon} ${getStatusLabel(tx.status)}</span></td>
         </tr>
@@ -1480,13 +1456,8 @@ function loadAddressTransactions(address, page = 1) {
         <tr onclick="viewTransaction('${tx.hash}')">
             <td class="hash-cell">${truncateHash(tx.hash)}</td>
             <td><span class="type-cell ${tx.type}">${tx.typeIcon} ${getTypeLabel(tx.type)}</span></td>
-            <td>${tx.pair}</td>
-            <td class="side-cell ${tx.side}">${getSideLabel(tx.side)}</td>
-            <td>${tx.priceFormatted}</td>
-            <td>${tx.sizeFormatted}</td>
-            <td>${tx.valueFormatted}</td>
-            <td>${tx.feeFormatted}</td>
             <td class="time-cell">${formatTimeI18n(tx.timestamp)}</td>
+            <td class="hash-cell"><a href="#batch/${tx.batchId}" onclick="event.stopPropagation(); viewBatch(${tx.batchId})">#${tx.batchId}</a></td>
             <td><span class="status-cell ${tx.status}" style="--status-color: ${tx.statusColor}">${tx.statusIcon} ${getStatusLabel(tx.status)}</span></td>
         </tr>
     `).join('');
