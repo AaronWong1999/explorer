@@ -68,63 +68,7 @@
         <main class="main-content">
             <!-- Home Page -->
             <div id="page-home" class="page active">
-                <!-- Row 1: Explorer Stats + Perp Stats -->
-                <div class="stats-bar stats-bar-6">
-                    <div class="stat-item stat-compact">
-                        <span class="stat-value" id="stat-total-txs">0</span>
-                        <span class="stat-label" data-i18n="stats.totalTxs">Transactions</span>
-                    </div>
-                    <div class="stat-item stat-compact">
-                        <span class="stat-value" id="stat-total-users">0</span>
-                        <span class="stat-label" data-i18n="stats.totalUsers">Users</span>
-                    </div>
-                    <div class="stat-item stat-compact stat-perp">
-                        <span class="stat-value" id="stat-perp-volume">$0</span>
-                        <span class="stat-label" data-i18n="stats.perpVolume">Perp Volume</span>
-                    </div>
-                    <div class="stat-item stat-compact stat-perp">
-                        <span class="stat-value" id="stat-perp-oi">$0</span>
-                        <span class="stat-label" data-i18n="stats.perpOI">Perp OI</span>
-                    </div>
-                    <div class="stat-item stat-compact stat-spot">
-                        <span class="stat-value" id="stat-spot-volume">$0</span>
-                        <span class="stat-label" data-i18n="stats.spotVolume">Spot Volume</span>
-                    </div>
-                    <div class="stat-item stat-compact">
-                        <span class="stat-value" id="stat-tvl">$0</span>
-                        <span class="stat-label" data-i18n="stats.tvl">TVL</span>
-                    </div>
-                </div>
-                
-                <!-- Row 2: Vault + Deposit Stats -->
-                <div class="stats-bar stats-bar-6">
-                    <div class="stat-item stat-compact stat-vault">
-                        <span class="stat-value" id="stat-vault-tvl">$0</span>
-                        <span class="stat-label" data-i18n="stats.vaultTVL">eStrategy TVL</span>
-                    </div>
-                    <div class="stat-item stat-compact">
-                        <span class="stat-value" id="stat-distinct-depositors">0</span>
-                        <span class="stat-label" data-i18n="stats.distinctDepositors">Depositors</span>
-                    </div>
-                    <div class="stat-item stat-compact">
-                        <span class="stat-value" id="stat-total-deposit">$0</span>
-                        <span class="stat-label" data-i18n="stats.totalDeposit">Deposit</span>
-                    </div>
-                    <div class="stat-item stat-compact">
-                        <span class="stat-value" id="stat-total-withdraw">$0</span>
-                        <span class="stat-label" data-i18n="stats.totalWithdraw">Withdraw</span>
-                    </div>
-                    <div class="stat-item stat-compact stat-income">
-                        <span class="stat-value" id="stat-total-income">$0</span>
-                        <span class="stat-label" data-i18n="stats.totalIncome">Income</span>
-                    </div>
-                    <div class="stat-item stat-compact">
-                        <span class="stat-value" id="stat-total-batches">0</span>
-                        <span class="stat-label" data-i18n="stats.totalBatches">Batches</span>
-                    </div>
-                </div>
-
-                <!-- $EDGE Repurchase Stats -->
+                <!-- 1. $EDGE Repurchase Stats -->
                 <div class="repurchase-section" data-feature="home.repurchase">
                     <div class="repurchase-header">
                         <h2 class="repurchase-title">$EDGE REPURCHASE</h2>
@@ -164,57 +108,63 @@
                     </div>
                 </div>
 
-                <!-- Two Column Layout -->
-                <div class="two-column-layout">
-                    <!-- Latest Transactions -->
-                    <div class="data-panel">
-                        <div class="panel-header">
-                            <h2 data-i18n="home.latestTxs">Latest Transactions</h2>
-                            <a href="#transactions" class="view-all" onclick="event.preventDefault(); navigateTo('transactions')" data-i18n="home.viewAll">View All →</a>
-                        </div>
-                        <div class="table-container">
-                            <table class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th data-i18n="table.txHash">Tx Hash</th>
-                                        <th data-i18n="table.type">Type</th>
-                                        <th data-i18n="table.pair">Pair</th>
-                                        <th data-i18n="table.time">Time</th>
-                                        <th data-i18n="table.user">User</th>
-                                        <th data-i18n="table.status">Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="latest-transactions">
-                                </tbody>
-                            </table>
-                        </div>
+                <!-- 2. Stats Row 1: Explorer Stats + Perp Stats -->
+                <div class="stats-bar stats-bar-6" data-feature="home.stats">
+                    <div class="stat-item stat-compact" data-feature="home.stats.totalTxs">
+                        <span class="stat-value" id="stat-total-txs">0</span>
+                        <span class="stat-label" data-i18n="stats.totalTxs">Transactions</span>
                     </div>
-
-                    <!-- Latest Batches -->
-                    <div class="data-panel">
-                        <div class="panel-header">
-                            <h2 data-i18n="home.latestBatches">Latest Batches</h2>
-                            <a href="#batches" class="view-all" onclick="event.preventDefault(); navigateTo('batches')" data-i18n="home.viewAll">View All →</a>
-                        </div>
-                        <div class="table-container">
-                            <table class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th data-i18n="table.batchId">Batch ID</th>
-                                        <th data-i18n="table.time">Time</th>
-                                        <th data-i18n="table.txns">Txns</th>
-                                        <th data-i18n="table.l1Tx">L1 Tx</th>
-                                        <th data-i18n="table.status">Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="latest-batches">
-                                </tbody>
-                            </table>
-                        </div>
+                    <div class="stat-item stat-compact" data-feature="home.stats.totalUsers">
+                        <span class="stat-value" id="stat-total-users">0</span>
+                        <span class="stat-label" data-i18n="stats.totalUsers">Users</span>
+                    </div>
+                    <div class="stat-item stat-compact stat-perp" data-feature="home.stats.perpVolume">
+                        <span class="stat-value" id="stat-perp-volume">$0</span>
+                        <span class="stat-label" data-i18n="stats.perpVolume">Perp Volume</span>
+                    </div>
+                    <div class="stat-item stat-compact stat-perp" data-feature="home.stats.perpOI">
+                        <span class="stat-value" id="stat-perp-oi">$0</span>
+                        <span class="stat-label" data-i18n="stats.perpOI">Perp OI</span>
+                    </div>
+                    <div class="stat-item stat-compact stat-spot" data-feature="home.stats.spotVolume">
+                        <span class="stat-value" id="stat-spot-volume">$0</span>
+                        <span class="stat-label" data-i18n="stats.spotVolume">Spot Volume</span>
+                    </div>
+                    <div class="stat-item stat-compact" data-feature="home.stats.tvl">
+                        <span class="stat-value" id="stat-tvl">$0</span>
+                        <span class="stat-label" data-i18n="stats.tvl">TVL</span>
+                    </div>
+                </div>
+                
+                <!-- 2. Stats Row 2: Vault + Deposit Stats -->
+                <div class="stats-bar stats-bar-6" data-feature="home.stats">
+                    <div class="stat-item stat-compact stat-vault" data-feature="home.stats.vaultTVL">
+                        <span class="stat-value" id="stat-vault-tvl">$0</span>
+                        <span class="stat-label" data-i18n="stats.vaultTVL">eStrategy TVL</span>
+                    </div>
+                    <div class="stat-item stat-compact" data-feature="home.stats.depositors">
+                        <span class="stat-value" id="stat-distinct-depositors">0</span>
+                        <span class="stat-label" data-i18n="stats.distinctDepositors">Depositors</span>
+                    </div>
+                    <div class="stat-item stat-compact" data-feature="home.stats.totalDeposit">
+                        <span class="stat-value" id="stat-total-deposit">$0</span>
+                        <span class="stat-label" data-i18n="stats.totalDeposit">Deposit</span>
+                    </div>
+                    <div class="stat-item stat-compact" data-feature="home.stats.totalWithdraw">
+                        <span class="stat-value" id="stat-total-withdraw">$0</span>
+                        <span class="stat-label" data-i18n="stats.totalWithdraw">Withdraw</span>
+                    </div>
+                    <div class="stat-item stat-compact stat-income" data-feature="home.stats.totalIncome">
+                        <span class="stat-value" id="stat-total-income">$0</span>
+                        <span class="stat-label" data-i18n="stats.totalIncome">Income</span>
+                    </div>
+                    <div class="stat-item stat-compact" data-feature="home.stats.totalBatches">
+                        <span class="stat-value" id="stat-total-batches">0</span>
+                        <span class="stat-label" data-i18n="stats.totalBatches">Batches</span>
                     </div>
                 </div>
 
-                <!-- Enhanced Search Box -->
+                <!-- 3. Enhanced Search Box -->
                 <div class="search-container" data-feature="home.search">
                     <div class="search-box" id="search-box">
                         <span class="search-icon">🔍</span>
@@ -246,6 +196,56 @@
                         <span class="search-tag" onclick="setSearchType('tx')">Tx Hash</span>
                         <span class="search-tag" onclick="setSearchType('address')">Address</span>
                         <span class="search-tag" onclick="setSearchType('batch')">Batch ID</span>
+                    </div>
+                </div>
+
+                <!-- 4. Two Column Layout -->
+                <div class="two-column-layout" data-feature="home.latestTxs">
+                    <!-- Latest Transactions -->
+                    <div class="data-panel">
+                        <div class="panel-header">
+                            <h2 data-i18n="home.latestTxs">Latest Transactions</h2>
+                            <a href="#transactions" class="view-all" onclick="event.preventDefault(); navigateTo('transactions')" data-i18n="home.viewAll">View All →</a>
+                        </div>
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th data-i18n="table.txHash" data-feature="home.latestTxs.hash">Tx Hash</th>
+                                        <th data-i18n="table.type" data-feature="home.latestTxs.type">Type</th>
+                                        <th data-i18n="table.pair" data-feature="home.latestTxs.pair">Pair</th>
+                                        <th data-i18n="table.time" data-feature="home.latestTxs.time">Time</th>
+                                        <th data-i18n="table.user" data-feature="home.latestTxs.user">User</th>
+                                        <th data-i18n="table.status" data-feature="home.latestTxs.status">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="latest-transactions">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Latest Batches -->
+                    <div class="data-panel" data-feature="home.latestBatches">
+                        <div class="panel-header">
+                            <h2 data-i18n="home.latestBatches">Latest Batches</h2>
+                            <a href="#batches" class="view-all" onclick="event.preventDefault(); navigateTo('batches')" data-i18n="home.viewAll">View All →</a>
+                        </div>
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th data-i18n="table.batchId" data-feature="home.latestBatches.id">Batch ID</th>
+                                        <th data-i18n="table.time" data-feature="home.latestBatches.time">Time</th>
+                                        <th data-i18n="table.txns" data-feature="home.latestBatches.txns">Txns</th>
+                                        <th data-i18n="table.l1Tx" data-feature="home.latestBatches.l1Tx">L1 Tx</th>
+                                        <th data-i18n="table.status" data-feature="home.latestBatches.status">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="latest-batches">
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
@@ -955,8 +955,25 @@
                                 <a href="#home" class="preview-btn" onclick="event.preventDefault(); navigateTo('home')">👁 查看页面</a>
                             </div>
                             
-                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="home.stats" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 1.1 统计面板</label></h3>
-                            <p>首页顶部展示关键统计数据，分为两行：</p>
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="home.repurchase" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 1.1 $EDGE 回购统计</label></h3>
+                            <p>展示 $EDGE 代币回购的统计数据</p>
+                            <table class="req-table req-table-checkable">
+                                <thead>
+                                    <tr><th></th><th>字段</th><th>说明</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.repurchase.address" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Repurchase Address</td><td>回购地址，可点击跳转</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.repurchase.totalAmount" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Total Amount</td><td>累计回购数量</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.repurchase.totalValue" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Total Value</td><td>累计回购金额</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.repurchase.24hAmount" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>24h Amount</td><td>过去24小时回购数量</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.repurchase.24hValue" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>24h Value</td><td>过去24小时回购金额</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.repurchase.24hAmountChange" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>24h Amount Change</td><td>24小时数量涨跌幅</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.repurchase.24hValueChange" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>24h Value Change</td><td>24小时金额涨跌幅</td></tr>
+                                </tbody>
+                            </table>
+
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="home.stats" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 1.2 统计面板</label></h3>
+                            <p>展示关键统计数据，分为两行共12个数据块：</p>
                             <table class="req-table req-table-checkable">
                                 <thead>
                                     <tr><th></th><th>字段</th><th>说明</th></tr>
@@ -977,7 +994,19 @@
                                 </tbody>
                             </table>
 
-                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="home.latestTxs" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 1.2 最新交易表格</label></h3>
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="home.search" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 1.3 搜索框</label></h3>
+                            <p>支持搜索交易哈希、地址、批次ID</p>
+                            <table class="req-table req-table-checkable">
+                                <thead>
+                                    <tr><th></th><th>功能</th><th>说明</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.search.recentSearches" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Recent Searches</td><td>最近搜索历史</td></tr>
+                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.search.popularSearches" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Popular Searches</td><td>24小时热门搜索地址</td></tr>
+                                </tbody>
+                            </table>
+
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="home.latestTxs" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 1.4 最新交易表格</label></h3>
                             <table class="req-table req-table-checkable">
                                 <thead>
                                     <tr><th></th><th>列名</th><th>说明</th></tr>
@@ -992,7 +1021,7 @@
                                 </tbody>
                             </table>
 
-                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="home.latestBatches" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 1.3 最新批次表格</label></h3>
+                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="home.latestBatches" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 1.5 最新批次表格</label></h3>
                             <table class="req-table req-table-checkable">
                                 <thead>
                                     <tr><th></th><th>列名</th><th>说明</th></tr>
@@ -1003,35 +1032,6 @@
                                     <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.latestBatches.txns" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Txns</td><td>包含交易数</td></tr>
                                     <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.latestBatches.l1Tx" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>L1 Tx</td><td>L1交易哈希</td></tr>
                                     <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.latestBatches.status" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Status</td><td>批次状态</td></tr>
-                                </tbody>
-                            </table>
-
-                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="home.search" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 1.4 搜索框</label></h3>
-                            <p>支持搜索交易哈希、地址、批次ID</p>
-                            <table class="req-table req-table-checkable">
-                                <thead>
-                                    <tr><th></th><th>功能</th><th>说明</th></tr>
-                                </thead>
-                                <tbody>
-                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.search.recentSearches" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Recent Searches</td><td>最近搜索历史</td></tr>
-                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.search.popularSearches" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Popular Searches</td><td>24小时热门搜索地址</td></tr>
-                                </tbody>
-                            </table>
-
-                            <h3><label class="feature-label"><input type="checkbox" class="feature-checkbox" data-feature="home.repurchase" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"> 1.5 $EDGE 回购统计</label></h3>
-                            <p>展示 $EDGE 代币回购的统计数据</p>
-                            <table class="req-table req-table-checkable">
-                                <thead>
-                                    <tr><th></th><th>字段</th><th>说明</th></tr>
-                                </thead>
-                                <tbody>
-                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.repurchase.address" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Repurchase Address</td><td>回购地址，可点击跳转</td></tr>
-                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.repurchase.totalAmount" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Total Amount</td><td>累计回购数量</td></tr>
-                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.repurchase.totalValue" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>Total Value</td><td>累计回购金额</td></tr>
-                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.repurchase.24hAmount" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>24h Amount</td><td>过去24小时回购数量</td></tr>
-                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.repurchase.24hValue" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>24h Value</td><td>过去24小时回购金额</td></tr>
-                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.repurchase.24hAmountChange" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>24h Amount Change</td><td>24小时数量涨跌幅</td></tr>
-                                    <tr><td><input type="checkbox" class="feature-checkbox" data-feature="home.repurchase.24hValueChange" onchange="FeatureConfig.toggle(this.dataset.feature, this.checked)"></td><td>24h Value Change</td><td>24小时金额涨跌幅</td></tr>
                                 </tbody>
                             </table>
                         </div>
