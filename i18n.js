@@ -11,14 +11,32 @@ const translations = {
         'nav.mainnet': 'Mainnet',
         'nav.testnet': 'Testnet',
         
-        // Stats
+        // Stats - Home Page Cards
+        'stats.repurchaseAmount.total': 'Total EDGE Repurchased',
+        'stats.repurchaseAmount.24h': '24h EDGE Repurchased',
+        'stats.repurchaseValue.total': 'Total EDGE Repurchase Value',
+        'stats.repurchaseValue.24h': '24h EDGE Repurchase Value',
+        'stats.perpOI.total': 'Total Perp OI',
+        'stats.perpOI.24h': '24h Perp OI',
+        'stats.perpVolume.total': 'Total Perp Volume',
+        'stats.perpVolume.24h': '24h Perp Volume',
+        'stats.spotVolume.total': 'Total Spot Volume',
+        'stats.spotVolume.24h': '24h Spot Volume',
+        'stats.vaultTVL.total': 'Total Vault TVL',
+        'stats.vaultTVL.24h': '24h Vault TVL',
+        'stats.totalUsers.total': 'Total Users',
+        'stats.totalUsers.24h': '24h Users',
+        'stats.totalTxs.total': 'Total Transactions',
+        'stats.totalTxs.24h': '24h Transactions',
+        
+        // Stats - Other
         'stats.totalTxs': 'Transactions',
         'stats.totalUsers': 'Users',
         'stats.perpVolume': 'Perp Volume',
         'stats.perpOI': 'Perp OI',
         'stats.spotVolume': 'Spot Volume',
         'stats.tvl': 'TVL',
-        'stats.vaultTVL': 'eStrategy TVL',
+        'stats.vaultTVL': 'Vault TVL',
         'stats.distinctDepositors': 'Depositors',
         'stats.totalDeposit': 'Deposit',
         'stats.totalWithdraw': 'Withdraw',
@@ -393,8 +411,26 @@ const translations = {
         'nav.mainnet': '主网',
         'nav.testnet': '测试网',
         
-        // Stats
-        'stats.totalTxs': '交易数',
+        // Stats - Home Page Cards
+        'stats.repurchaseAmount.total': '累计回购EDGE数量',
+        'stats.repurchaseAmount.24h': '过去24小时回购EDGE数量',
+        'stats.repurchaseValue.total': '累计回购EDGE金额',
+        'stats.repurchaseValue.24h': '过去24小时回购EDGE金额',
+        'stats.perpOI.total': '累计合约OI',
+        'stats.perpOI.24h': '过去24小时合约OI',
+        'stats.perpVolume.total': '累计合约交易量',
+        'stats.perpVolume.24h': '过去24小时合约交易量',
+        'stats.spotVolume.total': '累计现货交易量',
+        'stats.spotVolume.24h': '过去24小时现货交易量',
+        'stats.vaultTVL.total': '累计金库TVL',
+        'stats.vaultTVL.24h': '过去24小时金库TVL',
+        'stats.totalUsers.total': '累计用户数',
+        'stats.totalUsers.24h': '过去24小时用户数',
+        'stats.totalTxs.total': '累计事务数',
+        'stats.totalTxs.24h': '过去24小时事务数',
+        
+        // Stats - Other
+        'stats.totalTxs': '事务数',
         'stats.totalUsers': '用户数',
         'stats.perpVolume': '合约交易量',
         'stats.perpOI': '合约OI',

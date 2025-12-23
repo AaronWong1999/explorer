@@ -318,21 +318,30 @@ function initHomePage() {
 }
 
 function updateStats() {
-    // Row 1: Explorer Stats + Perp/Spot
-    document.getElementById('stat-total-txs').textContent = formatNumber(globalState.totalTransactions);
-    document.getElementById('stat-total-users').textContent = formatNumber(globalState.totalUsers);
-    document.getElementById('stat-perp-volume').textContent = formatUSD(globalState.perpVolume);
-    document.getElementById('stat-perp-oi').textContent = formatUSD(globalState.perpOI);
-    document.getElementById('stat-spot-volume').textContent = formatUSD(globalState.spotVolume);
-    document.getElementById('stat-tvl').textContent = formatUSD(globalState.totalTVL);
+    // Helper to set element text safely
+    const setText = (id, text) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = text;
+    };
     
-    // Row 2: Vault + Deposit Stats
-    document.getElementById('stat-vault-tvl').textContent = formatUSD(globalState.vaultTVL);
-    document.getElementById('stat-distinct-depositors').textContent = formatNumber(globalState.distinctDepositors);
-    document.getElementById('stat-total-deposit').textContent = formatUSD(globalState.totalDeposit);
-    document.getElementById('stat-total-withdraw').textContent = formatUSD(globalState.totalWithdraw);
-    document.getElementById('stat-total-income').textContent = formatUSD(globalState.totalIncome);
-    document.getElementById('stat-total-batches').textContent = formatNumber(globalState.totalBatches);
+    // Stats Cards - Total values
+    setText('stat-total-txs', formatNumber(globalState.totalTransactions));
+    setText('stat-total-users', formatNumber(globalState.totalUsers));
+    setText('stat-perp-volume', formatUSD(globalState.perpVolume));
+    setText('stat-perp-oi', formatUSD(globalState.perpOI));
+    setText('stat-spot-volume', formatUSD(globalState.spotVolume));
+    setText('stat-vault-tvl', formatUSD(globalState.vaultTVL));
+    
+    // Stats Cards - 24h values (using fake data for demo, static ratios)
+    setText('stat-txs-24h', formatNumber(Math.floor(globalState.totalTransactions * 0.05)));
+    setText('stat-users-24h', formatNumber(Math.floor(globalState.totalUsers * 0.02)));
+    setText('stat-perp-volume-24h', formatUSD(globalState.perpVolume * 0.08));
+    setText('stat-perp-oi-24h', formatUSD(globalState.perpOI * 0.03));
+    setText('stat-spot-volume-24h', formatUSD(globalState.spotVolume * 0.06));
+    setText('stat-vault-tvl-24h', formatUSD(globalState.vaultTVL * 0.01));
+    
+    // Note: Change percentages are static in HTML, no need to update them dynamically
+    // They should only change once per day in production
     
     // Update Repurchase Stats
     updateRepurchaseStats();
@@ -341,51 +350,27 @@ function updateStats() {
 function updateRepurchaseStats() {
     const repurchase = globalState.repurchase;
     
+    // Helper to set text
+    const setText = (id, text) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = text;
+    };
+    
     // Set address link
     const addressLink = document.getElementById('repurchase-address');
     if (addressLink) {
         addressLink.dataset.address = repurchase.address;
     }
     
-    // Total amount (format as M)
-    const totalAmountEl = document.getElementById('repurchase-total-amount');
-    if (totalAmountEl) {
-        totalAmountEl.textContent = formatNumber(repurchase.totalAmount);
-    }
+    // EDGE Repurchase Amount - Total and 24h
+    setText('repurchase-total-amount', formatNumber(repurchase.totalAmount));
+    setText('repurchase-24h-amount', formatNumber(repurchase.amount24h));
     
-    // Total value
-    const totalValueEl = document.getElementById('repurchase-total-value');
-    if (totalValueEl) {
-        totalValueEl.textContent = '$' + repurchase.totalValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    }
+    // EDGE Repurchase Value (Amount * EDGE Price) - Total and 24h
+    setText('repurchase-total-value', formatUSD(repurchase.totalValue));
+    setText('repurchase-24h-value', formatUSD(repurchase.value24h));
     
-    // 24h amount
-    const amount24hEl = document.getElementById('repurchase-24h-amount');
-    if (amount24hEl) {
-        amount24hEl.textContent = formatNumber(repurchase.amount24h);
-    }
-    
-    // 24h value
-    const value24hEl = document.getElementById('repurchase-24h-value');
-    if (value24hEl) {
-        value24hEl.textContent = '$' + repurchase.value24h.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    }
-    
-    // 24h amount change
-    const amountChangeEl = document.getElementById('repurchase-24h-amount-change');
-    if (amountChangeEl) {
-        const amountChange = repurchase.amountChange24h;
-        amountChangeEl.textContent = (amountChange >= 0 ? '↑ +' : '↓ ') + Math.abs(amountChange).toFixed(2) + '%';
-        amountChangeEl.className = 'repurchase-change ' + (amountChange >= 0 ? 'positive' : 'negative');
-    }
-    
-    // 24h value change
-    const valueChangeEl = document.getElementById('repurchase-24h-value-change');
-    if (valueChangeEl) {
-        const valueChange = repurchase.valueChange24h;
-        valueChangeEl.textContent = (valueChange >= 0 ? '↑ +' : '↓ ') + Math.abs(valueChange).toFixed(2) + '%';
-        valueChangeEl.className = 'repurchase-change ' + (valueChange >= 0 ? 'positive' : 'negative');
-    }
+    // Note: Change percentages are static in HTML, no need to update them dynamically
 }
 
 function updateLatestTransactions() {

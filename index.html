@@ -68,104 +68,8 @@
         <main class="main-content">
             <!-- Home Page -->
             <div id="page-home" class="page active">
-                <!-- 1. $EDGE Repurchase Stats -->
-                <div class="repurchase-section" data-feature="home.repurchase">
-                    <div class="repurchase-header">
-                        <h2 class="repurchase-title">$EDGE REPURCHASE</h2>
-                        <div class="repurchase-address" data-feature="home.repurchase.address">
-                            <span class="repurchase-address-label" data-i18n="repurchase.address">回购地址</span>
-                            <a href="#address/0xf977814e90da44bfa03b6295a0616a897441acec" class="repurchase-address-link" id="repurchase-address" data-address="0xf977814e90da44bfa03b6295a0616a897441acec" onclick="event.preventDefault(); viewAddress(this.dataset.address)">0xf977814e90da44bfa03b6295a0616a897441acec</a>
-                            <button class="copy-btn" onclick="copyText('0xf977814e90da44bfa03b6295a0616a897441acec')">📋</button>
-                        </div>
-                    </div>
-                    <div class="repurchase-stats">
-                        <div class="repurchase-card">
-                            <div class="repurchase-main" data-feature="home.repurchase.totalAmount">
-                                <span class="repurchase-label" data-i18n="repurchase.totalAmount">累计回购数量</span>
-                                <span class="repurchase-value" id="repurchase-total-amount">456.23M</span>
-                            </div>
-                            <div class="repurchase-sub">
-                                <span class="repurchase-sub-item" data-feature="home.repurchase.24hAmount">
-                                    <span class="repurchase-sub-label" data-i18n="repurchase.24hAmount">过去24小时回购数量</span>
-                                    <span class="repurchase-sub-value" id="repurchase-24h-amount">6.26M</span>
-                                </span>
-                                <span class="repurchase-change positive" id="repurchase-24h-amount-change" data-feature="home.repurchase.24hAmountChange">↑ +14.8%</span>
-                            </div>
-                        </div>
-                        <div class="repurchase-card">
-                            <div class="repurchase-main" data-feature="home.repurchase.totalValue">
-                                <span class="repurchase-label" data-i18n="repurchase.totalValue">累计回购金额</span>
-                                <span class="repurchase-value" id="repurchase-total-value">$192,873,986.06</span>
-                            </div>
-                            <div class="repurchase-sub">
-                                <span class="repurchase-sub-item" data-feature="home.repurchase.24hValue">
-                                    <span class="repurchase-sub-label" data-i18n="repurchase.24hValue">过去24小时回购金额</span>
-                                    <span class="repurchase-sub-value" id="repurchase-24h-value">$1,873,986.06</span>
-                                </span>
-                                <span class="repurchase-change negative" id="repurchase-24h-value-change" data-feature="home.repurchase.24hValueChange">↓ -7.93%</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 2. Stats Row 1: Explorer Stats + Perp Stats -->
-                <div class="stats-bar stats-bar-6" data-feature="home.stats">
-                    <div class="stat-item stat-compact" data-feature="home.stats.totalTxs">
-                        <span class="stat-value" id="stat-total-txs">0</span>
-                        <span class="stat-label" data-i18n="stats.totalTxs">Transactions</span>
-                    </div>
-                    <div class="stat-item stat-compact" data-feature="home.stats.totalUsers">
-                        <span class="stat-value" id="stat-total-users">0</span>
-                        <span class="stat-label" data-i18n="stats.totalUsers">Users</span>
-                    </div>
-                    <div class="stat-item stat-compact stat-perp" data-feature="home.stats.perpVolume">
-                        <span class="stat-value" id="stat-perp-volume">$0</span>
-                        <span class="stat-label" data-i18n="stats.perpVolume">Perp Volume</span>
-                    </div>
-                    <div class="stat-item stat-compact stat-perp" data-feature="home.stats.perpOI">
-                        <span class="stat-value" id="stat-perp-oi">$0</span>
-                        <span class="stat-label" data-i18n="stats.perpOI">Perp OI</span>
-                    </div>
-                    <div class="stat-item stat-compact stat-spot" data-feature="home.stats.spotVolume">
-                        <span class="stat-value" id="stat-spot-volume">$0</span>
-                        <span class="stat-label" data-i18n="stats.spotVolume">Spot Volume</span>
-                    </div>
-                    <div class="stat-item stat-compact" data-feature="home.stats.tvl">
-                        <span class="stat-value" id="stat-tvl">$0</span>
-                        <span class="stat-label" data-i18n="stats.tvl">TVL</span>
-                    </div>
-                </div>
-                
-                <!-- 2. Stats Row 2: Vault + Deposit Stats -->
-                <div class="stats-bar stats-bar-6" data-feature="home.stats">
-                    <div class="stat-item stat-compact stat-vault" data-feature="home.stats.vaultTVL">
-                        <span class="stat-value" id="stat-vault-tvl">$0</span>
-                        <span class="stat-label" data-i18n="stats.vaultTVL">eStrategy TVL</span>
-                    </div>
-                    <div class="stat-item stat-compact" data-feature="home.stats.depositors">
-                        <span class="stat-value" id="stat-distinct-depositors">0</span>
-                        <span class="stat-label" data-i18n="stats.distinctDepositors">Depositors</span>
-                    </div>
-                    <div class="stat-item stat-compact" data-feature="home.stats.totalDeposit">
-                        <span class="stat-value" id="stat-total-deposit">$0</span>
-                        <span class="stat-label" data-i18n="stats.totalDeposit">Deposit</span>
-                    </div>
-                    <div class="stat-item stat-compact" data-feature="home.stats.totalWithdraw">
-                        <span class="stat-value" id="stat-total-withdraw">$0</span>
-                        <span class="stat-label" data-i18n="stats.totalWithdraw">Withdraw</span>
-                    </div>
-                    <div class="stat-item stat-compact stat-income" data-feature="home.stats.totalIncome">
-                        <span class="stat-value" id="stat-total-income">$0</span>
-                        <span class="stat-label" data-i18n="stats.totalIncome">Income</span>
-                    </div>
-                    <div class="stat-item stat-compact" data-feature="home.stats.totalBatches">
-                        <span class="stat-value" id="stat-total-batches">0</span>
-                        <span class="stat-label" data-i18n="stats.totalBatches">Batches</span>
-                    </div>
-                </div>
-
-                <!-- 3. Enhanced Search Box -->
-                <div class="search-container" data-feature="home.search">
+                <!-- Row 1: Search + Repurchase Address -->
+                <div class="home-row-1" data-feature="home.search">
                     <div class="search-box" id="search-box">
                         <span class="search-icon">🔍</span>
                         <input type="text" id="search-input" 
@@ -192,14 +96,137 @@
                             </div>
                         </div>
                     </div>
-                    <div class="search-tags">
-                        <span class="search-tag" onclick="setSearchType('tx')">Tx Hash</span>
-                        <span class="search-tag" onclick="setSearchType('address')">Address</span>
-                        <span class="search-tag" onclick="setSearchType('batch')">Batch ID</span>
+                    <div class="repurchase-address-box" data-feature="home.repurchase.address">
+                        <span class="repurchase-address-label" data-i18n="repurchase.address">回购地址</span>
+                        <a href="#address/0xf977814e90da44bfa03b6295a0616a897441acec" class="repurchase-address-link" id="repurchase-address" data-address="0xf977814e90da44bfa03b6295a0616a897441acec" onclick="event.preventDefault(); viewAddress(this.dataset.address)">0xf977814e90da44bfa03b6295a0616a897441acec</a>
+                        <button class="copy-btn" onclick="copyText('0xf977814e90da44bfa03b6295a0616a897441acec')">📋</button>
                     </div>
                 </div>
 
-                <!-- 4. Two Column Layout -->
+                <!-- Row 2-3: Stats Cards Grid (8 cards, 4 per row) -->
+                <div class="stats-cards-grid" data-feature="home.stats">
+                    <!-- $EDGE Repurchase Amount -->
+                    <div class="stat-card" data-feature="home.stats.repurchaseAmount">
+                        <div class="stat-card-main">
+                            <span class="stat-card-label" data-i18n="stats.repurchaseAmount.total">累计回购EDGE数量</span>
+                            <span class="stat-card-value" id="repurchase-total-amount">456.23M</span>
+                        </div>
+                        <div class="stat-card-sub">
+                            <span class="stat-card-sub-item">
+                                <span class="stat-card-sub-label" data-i18n="stats.repurchaseAmount.24h">过去24小时回购EDGE数量</span>
+                                <span class="stat-card-sub-value" id="repurchase-24h-amount">6.26M</span>
+                            </span>
+                            <span class="stat-card-change positive" id="repurchase-amount-change">↑ +14.8%</span>
+                        </div>
+                    </div>
+
+                    <!-- $EDGE Repurchase Value -->
+                    <div class="stat-card" data-feature="home.stats.repurchaseValue">
+                        <div class="stat-card-main">
+                            <span class="stat-card-label" data-i18n="stats.repurchaseValue.total">累计回购EDGE金额</span>
+                            <span class="stat-card-value" id="repurchase-total-value">$192.87M</span>
+                        </div>
+                        <div class="stat-card-sub">
+                            <span class="stat-card-sub-item">
+                                <span class="stat-card-sub-label" data-i18n="stats.repurchaseValue.24h">过去24小时回购EDGE金额</span>
+                                <span class="stat-card-sub-value" id="repurchase-24h-value">$1.87M</span>
+                            </span>
+                            <span class="stat-card-change negative" id="repurchase-value-change">↓ -7.93%</span>
+                        </div>
+                    </div>
+
+                    <!-- Perp OI -->
+                    <div class="stat-card" data-feature="home.stats.perpOI">
+                        <div class="stat-card-main">
+                            <span class="stat-card-label" data-i18n="stats.perpOI.total">累计合约OI</span>
+                            <span class="stat-card-value" id="stat-perp-oi">$0</span>
+                        </div>
+                        <div class="stat-card-sub">
+                            <span class="stat-card-sub-item">
+                                <span class="stat-card-sub-label" data-i18n="stats.perpOI.24h">过去24小时合约OI</span>
+                                <span class="stat-card-sub-value" id="stat-perp-oi-24h">$0</span>
+                            </span>
+                            <span class="stat-card-change positive" id="stat-perp-oi-change">↑ +5.23%</span>
+                        </div>
+                    </div>
+
+                    <!-- Perp Volume -->
+                    <div class="stat-card" data-feature="home.stats.perpVolume">
+                        <div class="stat-card-main">
+                            <span class="stat-card-label" data-i18n="stats.perpVolume.total">累计合约交易量</span>
+                            <span class="stat-card-value" id="stat-perp-volume">$0</span>
+                        </div>
+                        <div class="stat-card-sub">
+                            <span class="stat-card-sub-item">
+                                <span class="stat-card-sub-label" data-i18n="stats.perpVolume.24h">过去24小时合约交易量</span>
+                                <span class="stat-card-sub-value" id="stat-perp-volume-24h">$0</span>
+                            </span>
+                            <span class="stat-card-change positive" id="stat-perp-volume-change">↑ +12.45%</span>
+                        </div>
+                    </div>
+
+                    <!-- Spot Volume -->
+                    <div class="stat-card" data-feature="home.stats.spotVolume">
+                        <div class="stat-card-main">
+                            <span class="stat-card-label" data-i18n="stats.spotVolume.total">累计现货交易量</span>
+                            <span class="stat-card-value" id="stat-spot-volume">$0</span>
+                        </div>
+                        <div class="stat-card-sub">
+                            <span class="stat-card-sub-item">
+                                <span class="stat-card-sub-label" data-i18n="stats.spotVolume.24h">过去24小时现货交易量</span>
+                                <span class="stat-card-sub-value" id="stat-spot-volume-24h">$0</span>
+                            </span>
+                            <span class="stat-card-change positive" id="stat-spot-volume-change">↑ +8.67%</span>
+                        </div>
+                    </div>
+
+                    <!-- Vault TVL -->
+                    <div class="stat-card" data-feature="home.stats.vaultTVL">
+                        <div class="stat-card-main">
+                            <span class="stat-card-label" data-i18n="stats.vaultTVL.total">累计金库TVL</span>
+                            <span class="stat-card-value" id="stat-vault-tvl">$0</span>
+                        </div>
+                        <div class="stat-card-sub">
+                            <span class="stat-card-sub-item">
+                                <span class="stat-card-sub-label" data-i18n="stats.vaultTVL.24h">过去24小时金库TVL</span>
+                                <span class="stat-card-sub-value" id="stat-vault-tvl-24h">$0</span>
+                            </span>
+                            <span class="stat-card-change positive" id="stat-vault-tvl-change">↑ +3.21%</span>
+                        </div>
+                    </div>
+
+                    <!-- Users -->
+                    <div class="stat-card" data-feature="home.stats.totalUsers">
+                        <div class="stat-card-main">
+                            <span class="stat-card-label" data-i18n="stats.totalUsers.total">累计用户数</span>
+                            <span class="stat-card-value" id="stat-total-users">0</span>
+                        </div>
+                        <div class="stat-card-sub">
+                            <span class="stat-card-sub-item">
+                                <span class="stat-card-sub-label" data-i18n="stats.totalUsers.24h">过去24小时用户数</span>
+                                <span class="stat-card-sub-value" id="stat-users-24h">0</span>
+                            </span>
+                            <span class="stat-card-change positive" id="stat-users-change">↑ +6.89%</span>
+                        </div>
+                    </div>
+
+                    <!-- Transactions -->
+                    <div class="stat-card" data-feature="home.stats.totalTxs">
+                        <div class="stat-card-main">
+                            <span class="stat-card-label" data-i18n="stats.totalTxs.total">累计事务数</span>
+                            <span class="stat-card-value" id="stat-total-txs">0</span>
+                        </div>
+                        <div class="stat-card-sub">
+                            <span class="stat-card-sub-item">
+                                <span class="stat-card-sub-label" data-i18n="stats.totalTxs.24h">过去24小时事务数</span>
+                                <span class="stat-card-sub-value" id="stat-txs-24h">0</span>
+                            </span>
+                            <span class="stat-card-change positive" id="stat-txs-change">↑ +9.34%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 4: Two Column Layout - Latest Transactions & Batches -->
                 <div class="two-column-layout" data-feature="home.latestTxs">
                     <!-- Latest Transactions -->
                     <div class="data-panel">

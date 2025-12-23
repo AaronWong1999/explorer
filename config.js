@@ -5,19 +5,19 @@ const FeatureConfig = {
     // Default configuration - all features enabled
     defaults: {
         // ============ HOME PAGE ============
+        'home.search': true,
+        'home.search.recentSearches': true,
+        'home.search.popularSearches': true,
+        'home.repurchase.address': true,
         'home.stats': true,
-        'home.stats.totalTxs': true,
-        'home.stats.totalUsers': true,
-        'home.stats.perpVolume': true,
+        'home.stats.repurchaseAmount': true,
+        'home.stats.repurchaseValue': true,
         'home.stats.perpOI': true,
+        'home.stats.perpVolume': true,
         'home.stats.spotVolume': true,
-        'home.stats.tvl': true,
         'home.stats.vaultTVL': true,
-        'home.stats.depositors': true,
-        'home.stats.totalDeposit': true,
-        'home.stats.totalWithdraw': true,
-        'home.stats.totalIncome': true,
-        'home.stats.totalBatches': true,
+        'home.stats.totalUsers': true,
+        'home.stats.totalTxs': true,
         'home.latestTxs': true,
         'home.latestTxs.hash': true,
         'home.latestTxs.type': true,
@@ -31,19 +31,6 @@ const FeatureConfig = {
         'home.latestBatches.txns': true,
         'home.latestBatches.l1Tx': true,
         'home.latestBatches.status': true,
-        'home.search': true,
-        'home.search.recentSearches': true,
-        'home.search.popularSearches': true,
-        
-        // ============ HOME - REPURCHASE ============
-        'home.repurchase': true,
-        'home.repurchase.address': true,
-        'home.repurchase.totalAmount': true,
-        'home.repurchase.totalValue': true,
-        'home.repurchase.24hAmount': true,
-        'home.repurchase.24hValue': true,
-        'home.repurchase.24hAmountChange': true,
-        'home.repurchase.24hValueChange': true,
 
         // ============ TRANSACTIONS PAGE ============
         'txs.statsBar': true,
