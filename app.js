@@ -396,7 +396,6 @@ function updateLatestTransactions() {
         <tr onclick="viewTransaction('${tx.hash}')">
             <td class="hash-cell">${truncateHash(tx.hash)}</td>
             <td><span class="type-cell ${tx.type}" title="${getTypeLabel(tx.type)}">${tx.typeIcon} ${getTypeLabel(tx.type)}</span></td>
-            <td>${tx.pair}</td>
             <td class="time-cell">${formatTimeI18n(tx.timestamp)}</td>
             <td class="address-cell">${truncateHash(tx.user, 6, 4)}</td>
             <td><span class="status-cell ${tx.status}" style="--status-color: ${tx.statusColor}">${tx.statusIcon} ${getStatusLabel(tx.status)}</span></td>

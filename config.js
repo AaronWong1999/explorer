@@ -21,7 +21,6 @@ const FeatureConfig = {
         'home.latestTxs': true,
         'home.latestTxs.hash': true,
         'home.latestTxs.type': true,
-        'home.latestTxs.pair': true,
         'home.latestTxs.time': true,
         'home.latestTxs.user': true,
         'home.latestTxs.status': true,
@@ -343,10 +342,9 @@ const FeatureConfig = {
         this.applyColumnVisibility('latest-transactions', {
             0: 'home.latestTxs.hash',
             1: 'home.latestTxs.type',
-            2: 'home.latestTxs.pair',
-            3: 'home.latestTxs.time',
-            4: 'home.latestTxs.user',
-            5: 'home.latestTxs.status'
+            2: 'home.latestTxs.time',
+            3: 'home.latestTxs.user',
+            4: 'home.latestTxs.status'
         });
 
         // Home - Latest Batches

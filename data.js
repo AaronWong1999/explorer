@@ -142,21 +142,21 @@ const TX_TYPES = [
     { type: 'funding', label: 'Funding', category: 'funding', weight: 3, icon: '💰', market: 'perp' },
     
     // ========== TRANSFERS (资产划转) ==========
-    { type: 'deposit', label: 'Deposit', category: 'transfer', weight: 3, icon: '📥', market: 'both' },
-    { type: 'withdraw', label: 'Withdraw', category: 'transfer', weight: 2, icon: '📤', market: 'both' },
+    { type: 'deposit', label: 'Deposit', category: 'transfer', weight: 8, icon: '📥', market: 'both' },
+    { type: 'withdraw', label: 'Withdraw', category: 'transfer', weight: 6, icon: '📤', market: 'both' },
     // Perp <-> Spot
-    { type: 'perpToSpot', label: 'Perp→Spot', category: 'transfer', weight: 2, icon: '➡️', market: 'both' },
-    { type: 'spotToPerp', label: 'Spot→Perp', category: 'transfer', weight: 2, icon: '⬅️', market: 'both' },
+    { type: 'perpToSpot', label: 'Perp→Spot', category: 'transfer', weight: 5, icon: '➡️', market: 'both' },
+    { type: 'spotToPerp', label: 'Spot→Perp', category: 'transfer', weight: 5, icon: '⬅️', market: 'both' },
     // Perp <-> Prediction (Polymarket)
-    { type: 'perpToPred', label: 'Perp→Prediction', category: 'transfer', weight: 1.5, icon: '🎯', market: 'both' },
-    { type: 'predToPerp', label: 'Prediction→Perp', category: 'transfer', weight: 1.5, icon: '🎯', market: 'both' },
+    { type: 'perpToPred', label: 'Perp→Prediction', category: 'transfer', weight: 3, icon: '🎯', market: 'both' },
+    { type: 'predToPerp', label: 'Prediction→Perp', category: 'transfer', weight: 3, icon: '🎯', market: 'both' },
     // Spot <-> Prediction (Polymarket)
-    { type: 'spotToPred', label: 'Spot→Prediction', category: 'transfer', weight: 1, icon: '🔮', market: 'both' },
-    { type: 'predToSpot', label: 'Prediction→Spot', category: 'transfer', weight: 1, icon: '🔮', market: 'both' },
+    { type: 'spotToPred', label: 'Spot→Prediction', category: 'transfer', weight: 2, icon: '🔮', market: 'both' },
+    { type: 'predToSpot', label: 'Prediction→Spot', category: 'transfer', weight: 2, icon: '🔮', market: 'both' },
     // Spot Token Transfer (non-USDC)
-    { type: 'spotTransfer', label: 'Spot Transfer', category: 'transfer', weight: 1.5, icon: '💸', market: 'spot' },
+    { type: 'spotTransfer', label: 'Spot Transfer', category: 'transfer', weight: 3, icon: '💸', market: 'spot' },
     // Internal
-    { type: 'internalTransfer', label: 'Internal Transfer', category: 'transfer', weight: 0.5, icon: '↔️', market: 'both' },
+    { type: 'internalTransfer', label: 'Internal Transfer', category: 'transfer', weight: 2, icon: '↔️', market: 'both' },
     
     // ========== ACCOUNT (账户管理 - 仅合约) ==========
     { type: 'updateLeverage', label: 'Update Leverage', category: 'account', weight: 1, icon: '📊', market: 'perp' },
@@ -166,9 +166,9 @@ const TX_TYPES = [
     { type: 'approveAgent', label: 'Approve API Wallet', category: 'account', weight: 0.3, icon: '🤖', market: 'both' },
     
     // ========== VAULT / eStrategy (金库) ==========
-    { type: 'vaultDeposit', label: 'eStrategy Deposit', category: 'vault', weight: 1.5, icon: '🏦', market: 'both' },
-    { type: 'vaultWithdraw', label: 'eStrategy Withdraw', category: 'vault', weight: 1, icon: '🏧', market: 'both' },
-    { type: 'vaultClaim', label: 'Claim Rewards', category: 'vault', weight: 0.5, icon: '🎁', market: 'both' },
+    { type: 'vaultDeposit', label: 'eStrategy Deposit', category: 'vault', weight: 4, icon: '🏦', market: 'both' },
+    { type: 'vaultWithdraw', label: 'eStrategy Withdraw', category: 'vault', weight: 3, icon: '🏧', market: 'both' },
+    { type: 'vaultClaim', label: 'Claim Rewards', category: 'vault', weight: 2, icon: '🎁', market: 'both' },
     
 ];
 
