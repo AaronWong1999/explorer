@@ -477,7 +477,7 @@ function startRealTimeUpdates() {
     }, 3000 + Math.random() * 5000);
     updateIntervals.push(specialEventInterval);
     
-    // Add new batch
+    // Add new batch every 2 seconds
     const batchInterval = setInterval(() => {
         const newBatch = addNewBatch();
         
@@ -487,7 +487,7 @@ function startRealTimeUpdates() {
         } else if (currentPage === 'batches') {
             updateBatchesPageRealtime(newBatch);
         }
-    }, 20000 + Math.random() * 10000);
+    }, 2000);
     updateIntervals.push(batchInterval);
     
     // Update stats

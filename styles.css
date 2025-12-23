@@ -708,6 +708,26 @@ a:hover {
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.data-panel .table-container {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.data-panel .data-table tbody {
+    display: block;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.data-panel .data-table thead,
+.data-panel .data-table tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
 }
 
 .panel-header {
