@@ -311,7 +311,6 @@ function initHomePage() {
     updateLatestTransactions();
     updateLatestBatches();
     updateLiveFeed();
-    initPopularSearches();
     initSearchTypeDropdowns();
     startRealTimeUpdates();
 }
@@ -658,19 +657,6 @@ function hideSearchDropdown() {
     isSearchFocused = false;
 }
 
-function initPopularSearches() {
-    const container = document.getElementById('popular-searches');
-    const popular = [
-        { text: '#' + globalState.latestBatch, type: 'batch' },
-        { text: '#' + (globalState.latestBatch - 1), type: 'batch' },
-        { text: '#' + (globalState.latestBatch - 2), type: 'batch' },
-    ];
-    
-    container.innerHTML = popular.map(item => `
-        <span class="popular-search-item" onclick="quickSearch('${item.text}')">${item.text}</span>
-    `).join('');
-}
-
 function updateRecentSearches() {
     const container = document.getElementById('recent-searches');
     const section = document.getElementById('recent-searches-section');
@@ -760,23 +746,40 @@ function performLiveSearch(query) {
                 action: () => viewTransaction(query)
             });
         }
-        // For partial input, show both possibilities
-        else if (query.length >= 6) {
-            results.push({
-                type: 'address',
-                icon: '👤',
-                title: truncateHash(query, 10, 8) + '...',
-                subtitle: t('search.address'),
-                badge: 'address',
-                action: () => viewAddress(query.padEnd(42, '0'))
+        // For partial input, show suggestions from existing data
+        else if (query.length >= 4) {
+            // Find matching transactions
+            const matchingTxs = globalState.transactions.filter(tx => 
+                tx.hash.toLowerCase().includes(query.toLowerCase())
+            ).slice(0, 2);
+            
+            matchingTxs.forEach(tx => {
+                results.push({
+                    type: 'tx',
+                    icon: '📄',
+                    title: truncateHash(tx.hash, 10, 8),
+                    subtitle: `${tx.typeIcon} ${getTypeLabel(tx.type)} • ${tx.pair}`,
+                    badge: 'tx',
+                    action: () => viewTransaction(tx.hash)
+                });
             });
-            results.push({
-                type: 'tx',
-                icon: '📄',
-                title: truncateHash(query, 10, 8) + '...',
-                subtitle: t('search.txHash'),
-                badge: 'tx',
-                action: () => viewTransaction(query.padEnd(66, '0'))
+            
+            // Find matching addresses
+            const matchingAddrs = globalState.transactions
+                .map(tx => tx.user)
+                .filter((addr, i, arr) => arr.indexOf(addr) === i)
+                .filter(addr => addr.toLowerCase().includes(query.toLowerCase()))
+                .slice(0, 2);
+            
+            matchingAddrs.forEach(addr => {
+                results.push({
+                    type: 'address',
+                    icon: '👤',
+                    title: truncateHash(addr, 10, 8),
+                    subtitle: t('search.address'),
+                    badge: 'address',
+                    action: () => viewAddress(addr)
+                });
             });
         }
     } 
@@ -792,7 +795,60 @@ function performLiveSearch(query) {
                 badge: 'batch',
                 action: () => viewBatch(num)
             });
+            
+            // Also suggest nearby batches
+            if (num <= globalState.latestBatch) {
+                const nearbyBatches = [num + 1, num + 2].filter(n => n <= globalState.latestBatch);
+                nearbyBatches.forEach(n => {
+                    results.push({
+                        type: 'batch',
+                        icon: '📦',
+                        title: '#' + n,
+                        subtitle: t('search.batch'),
+                        badge: 'batch',
+                        action: () => viewBatch(n)
+                    });
+                });
+            }
         }
+    }
+    // General text search - show sample results from each type
+    else if (query.length >= 2) {
+        // Show recent transactions
+        const recentTxs = globalState.transactions.slice(0, 2);
+        recentTxs.forEach(tx => {
+            results.push({
+                type: 'tx',
+                icon: '📄',
+                title: truncateHash(tx.hash, 10, 8),
+                subtitle: `${tx.typeIcon} ${getTypeLabel(tx.type)} • ${tx.pair}`,
+                badge: 'tx',
+                action: () => viewTransaction(tx.hash)
+            });
+        });
+        
+        // Show a sample address
+        if (globalState.transactions.length > 0) {
+            const addr = globalState.transactions[0].user;
+            results.push({
+                type: 'address',
+                icon: '👤',
+                title: truncateHash(addr, 10, 8),
+                subtitle: t('search.address'),
+                badge: 'address',
+                action: () => viewAddress(addr)
+            });
+        }
+        
+        // Show recent batches
+        results.push({
+            type: 'batch',
+            icon: '📦',
+            title: '#' + globalState.latestBatch,
+            subtitle: t('search.batch'),
+            badge: 'batch',
+            action: () => viewBatch(globalState.latestBatch)
+        });
     }
     
     if (results.length === 0) {
