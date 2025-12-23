@@ -506,7 +506,7 @@ function initializeData() {
     // Generate addresses
     const addressList = [...new Set(globalState.transactions.map(tx => tx.user))];
     addressList.forEach(addr => {
-        const txs = globalState.transactions.filter(tx => tx.user === addr || tx.counterparty === addr);
+        const txs = globalState.transactions.filter(tx => tx.user === addr);
         globalState.addresses[addr] = {
             address: addr,
             txCount: Math.floor(Math.random() * 5000) + 100,
@@ -535,7 +535,6 @@ function addNewTransaction() {
     }
     
     globalState.totalTransactions++;
-    globalState.volume24h += tx.value;
     globalState.currentTPS = Math.floor(800 + Math.random() * 800);
     
     updateGlobalStats();
@@ -619,7 +618,7 @@ function getTransactions(page = 1, limit = 20, filters = {}) {
     }
     
     if (filters.address) {
-        filtered = filtered.filter(tx => tx.user === filters.address || tx.counterparty === filters.address);
+        filtered = filtered.filter(tx => tx.user === filters.address);
     }
     
     const start = (page - 1) * limit;
